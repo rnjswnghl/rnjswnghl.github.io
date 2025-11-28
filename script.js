@@ -155,3 +155,96 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// Project Modal functionality
+const projectModal = document.getElementById('projectModal');
+const modalClose = document.querySelector('.modal-close');
+const modalOverlay = document.querySelector('.modal-overlay');
+const projectFrame = document.getElementById('projectFrame');
+const modalTitle = document.getElementById('modalTitle');
+const modalLoading = document.querySelector('.modal-loading');
+const modalError = document.querySelector('.modal-error');
+
+// Open modal when clicking on "프로젝트 보기" button or project card
+document.querySelectorAll('.view-project, .project-card').forEach(element => {
+    element.addEventListener('click', (e) => {
+        // Prevent default link behavior
+        if (element.classList.contains('view-project')) {
+            e.preventDefault();
+        }
+        
+        // Get project path
+        const projectPath = element.getAttribute('data-project-path') || 
+                           element.closest('.project-card')?.getAttribute('data-project-path');
+        
+        if (projectPath) {
+            openProjectModal(projectPath, element);
+        }
+    });
+});
+
+function openProjectModal(projectPath, element) {
+    // Get project title from the card
+    const projectTitle = element.closest('.project-card')?.querySelector('h3')?.textContent || '프로젝트 미리보기';
+    modalTitle.textContent = projectTitle;
+    
+    // Show modal
+    projectModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Show loading
+    modalLoading.classList.remove('hidden');
+    modalError.style.display = 'none';
+    
+    // Load project in iframe
+    projectFrame.src = projectPath;
+    
+    // Handle iframe load
+    projectFrame.onload = () => {
+        modalLoading.classList.add('hidden');
+        modalError.style.display = 'none';
+    };
+    
+    // Handle iframe error
+    projectFrame.onerror = () => {
+        modalLoading.classList.add('hidden');
+        modalError.style.display = 'flex';
+    };
+    
+    // Also check if file exists after a timeout
+    setTimeout(() => {
+        fetch(projectPath, { method: 'HEAD' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File not found');
+                }
+            })
+            .catch(() => {
+                modalLoading.classList.add('hidden');
+                modalError.style.display = 'flex';
+            });
+    }, 2000);
+}
+
+// Close modal
+function closeProjectModal() {
+    projectModal.classList.remove('active');
+    document.body.style.overflow = '';
+    projectFrame.src = '';
+    modalLoading.classList.remove('hidden');
+    modalError.style.display = 'none';
+}
+
+if (modalClose) {
+    modalClose.addEventListener('click', closeProjectModal);
+}
+if (modalOverlay) {
+    modalOverlay.addEventListener('click', closeProjectModal);
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && projectModal && projectModal.classList.contains('active')) {
+        closeProjectModal();
+    }
+});
+

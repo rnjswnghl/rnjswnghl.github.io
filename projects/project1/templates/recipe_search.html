@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레시피 검색</title>
+
+    <!-- Google Fonts 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
+    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+
+    <!-- CSS 스타일 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recipe_search.css') }}">
+</head>
+{% extends "layout.html" %}
+
+{% block content %}
+    <!-- 상단 내비게이션 -->
+    <div class="recipesearch">
+        <h1>레시피 검색</h1>
+    </div>
+
+    <div class="search-container">
+        <input type="text" placeholder="레시피 검색">
+        <button>🔍</button>
+    </div>
+
+    <div class="popular-tags">
+        <span>#해시태그</span>
+        <span>#레시피</span>
+        <span>#요리꿀팁</span>
+    </div>
+
+    <div class="recipe-list">
+        <table>
+            {% for recipe in recipes %}
+            <tr>
+                <td>{{ recipe.id }}</td>
+                <td>{{ recipe.title }}</td>
+                <td>{{ recipe.author }}</td>
+                <td>{{ recipe.date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endblock %}
+</html>

@@ -1,0 +1,244 @@
+/* layout.css: 사이드 메뉴 스타일 */  
+
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+
+@font-face {
+    font-family: 'basicfont'; /* 사용할 글꼴 이름 */
+    src: url('../fonts/HakgyoansimBareonbatangR.ttf') format('truetype'); /* 파일 경로와 형식 */
+    font-weight: normal; /* 선택: 굵기 */
+    font-style: normal; /* 선택: 스타일 */
+}
+
+/* 포인트 글씨 (한글) */
+.point-font {
+    font-family: 'basicfont', sans-serif;
+}
+
+/* 본문 글씨 */
+/* .korean-font {
+    font-family: 'basicfont', sans-serif;
+    font-weight: 500;
+}  */
+
+/* Marcellus (영어) */
+.english-font {
+    font-family: 'Marcellus', serif;
+}
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Wanted Sans Variable", "Wanted Sans", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+/* 기본 스타일 */
+body {
+    height: 100%; /* 화면 전체 높이 */
+    /* background-image: url('/static/images/background_image.png');
+    background-size: contain; */
+    /* display: flex; */
+    display: flex;
+    flex-direction: column;
+    background-repeat: no-repeat;
+    /* margin: 0;
+    padding: 0; */
+    font-family: "Wanted Sans Variable", "Wanted Sans", sans-serif;
+}
+
+/* Background Section */
+.background-container {
+    background-image: url('../images/background_image.png'); /* 배경 이미지 경로 */
+    /* background-size: cover;  */
+    background-size: 100% 100%;
+    background-position: center; /* 이미지의 중심을 기준으로 배치 */
+    background-repeat: no-repeat; /* 이미지 반복 방지 */
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 20px; */
+  }
+
+.wrapper {
+    /* flex: 1; 콘텐츠 영역이 가변적으로 확장 */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-bottom: 20px;
+}
+
+.content {
+    flex: 1; /* 나머지 공간을 차지 */
+    /* padding: 20px; */
+    /* text-align: center; */
+  }
+
+.main-title {
+    font-size: 45px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: whitesmoke;
+    /* color: #1A4B8C; */
+    cursor: pointer;
+    
+    background-size: cover;
+    height: 350px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    color: #fff;
+}
+
+.menu {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #042C57;
+    color: white;
+    overflow-x: hidden;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    z-index: 1000;
+}
+
+/* 닫기 버튼 스타일 */
+.closebtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* 프로필 섹션 */
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px 0;
+    border-bottom: 1px solid #fff;
+    margin-bottom: 15px;
+}
+
+.profile img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* .profile span {
+    font-size: 20px;
+    font-weight: bold;
+} */
+
+/* 메뉴 링크 스타일 */
+.menu a {
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    display: block;
+    transition: background-color 0.3s;
+    font-family: "Wanted Sans Variable", "Wanted Sans", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+.menu a:hover {
+    background-color: #1A4B8C;
+}
+
+/* 구분선 스타일 */
+.divider {
+    width: 80%;
+    height: 1px;
+    background-color: #ffffff;
+    margin: 10px auto;
+}
+
+/* 버튼 스타일 (로그인, 회원가입 등) */
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    margin-top: auto;
+}
+
+.menu-buttons button {
+    background-color: white;
+    color: #042C57;
+    border: none;
+    padding: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s, color 0.2s;
+    margin-bottom: 0.5cm;
+}
+
+.menu-buttons button:hover {
+    background-color: #1A4B8C;
+    color: white;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: rgb(29, 102, 0);
+    color: #fff;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    
+}
+
+.footer-container {
+    height: auto;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer-logo {
+    width: 80px; /* 로고 너비 */
+    height: 50px; /* 로고 높이 */
+    object-fit: cover; /* 이미지 비율 유지 */
+}
+
+.fairy{
+    padding: 0 0 0 0;
+    margin-bottom: 5px;
+}
+
+.footer-a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-a:hover {
+    color: #ffd700;
+}

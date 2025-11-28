@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - 요리의 정원</title>
+    <link rel="stylesheet" href="static/css/layout.css">
+    <link rel="stylesheet" href="static/css/mypagemain.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
+    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+</head>
+<body>
+    <div class="background-container">
+        <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+        <header>
+            <div class="point-font main-title" onclick="window.location.href='index.html'">요리의 정원</div>
+        </header>
+
+        <div id="menu" class="menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">×</a>   
+            <div class="profile">
+                <span>Guest</span>
+            </div>
+            <div class="menu-basictag">
+                <a href="index.html">Home</a>
+                <a href="recipe_main.html">레시피</a>
+                <a href="cooktip.html">요리 꿀팁</a>
+                <a href="login.html">로그인</a>
+                <a href="signup.html">회원가입</a>
+                <a href="recipe_register.html">레시피 작성</a>
+                <a href="mypagemain.html">마이페이지</a>
+            </div>
+            <div class="menu-buttons">
+                <button onclick="window.location.href='login.html'">로그인</button>
+                <button onclick="window.location.href='signup.html'">회원가입</button>
+            </div>
+        </div>
+
+        <main class="wrapper">
+            <div class="content">
+                <header>
+                    <h1>마이 페이지</h1>
+                </header>
+
+                <div class="container">
+                    <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
+                        <p style="margin: 0; color: #856404; font-size: 0.9rem;">
+                            ⚠️ 데모 버전: 마이페이지 기능은 작동하지 않습니다.
+                        </p>
+                    </div>
+
+                    <div class="profile-section">
+                        <div class="profile-picture" onclick="document.getElementById('profile-input').click()">
+                            <img id="profile-image" src="static/images/profile_basic.image.png" alt="프로필 사진">
+                        </div>
+                        <input type="file" id="profile-input" accept="image/*" style="display: none" onchange="previewProfileImage(event)">
+                        
+                        <button class="reset-image-button" onclick="resetProfileImage()">기본 이미지로 변경</button>
+
+                        <div class="nickname">
+                            <span id="nickname-display">Guest</span>
+                            <input type="text" id="nickname-input" value="Guest" style="display: none;" onblur="saveNickname()">
+                            <span class="edit-icon" onclick="editNickname()">✏️</span>
+                        </div>
+                    </div>
+
+                    <div class="user-info">
+                        <p>이름: <span id="name-display">홍길동</span>
+                            <input type="text" id="name-input" value="홍길동" style="display: none;">
+                        </p>
+                        <p>성별:
+                            <label><input type="radio" id="male" name="gender" value="male"> 남자</label>
+                            <label><input type="radio" id="female" name="gender" value="female"> 여자</label>
+                        </p>
+                        <p>전화번호: <span id="phone-display">010-1234-5678</span>
+                            <input type="text" id="phone-input" value="010-1234-5678" style="display: none;">
+                        </p>
+                        <p>이메일: <span id="email-display">example@example.com</span>
+                            <input type="text" id="email-input" value="example@example.com" style="display: none;">
+                        </p>
+                        <p>알레르기 정보: <span id="allergy-display">없음</span>
+                            <input type="text" id="allergy-input" value="없음" style="display: none;">
+                        </p>
+                        <button class="edit-info-button" onclick="alert('데모 버전에서는 정보를 수정할 수 없습니다.')">정보 수정하기</button>
+                    </div>
+                </div>
+
+                <div class="recipe-sections">
+                    <div class="recipe-category">
+                        <h3>스크랩한 레시피 <span>💾</span></h3>
+                        <div class="recipe-thumbnails">
+                            <div class="recipe-thumbnail">김치찌개</div>
+                            <div class="recipe-thumbnail">된장찌개</div>
+                            <div class="recipe-thumbnail">비빔밥</div>
+                        </div>
+                    </div>
+                    <div class="recipe-category">
+                        <h3>좋아요한 레시피 <span>💘</span></h3>
+                        <div class="recipe-thumbnails">
+                            <div class="recipe-thumbnail">불고기</div>
+                            <div class="recipe-thumbnail">떡볶이</div>
+                            <div class="recipe-thumbnail">라면</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                    <img src="static/images/smartbusan_logo.png" alt="digital smart busan logo" class="footer-logo">
+                    <a class="footer-a" href="https://github.com/ggabaegii/RecipeRecommendation" target="_blank">&nbsp;&nbsp;Github</a>
+                    <p class="fairy"> Fairies 김소희 권주회 임수현 조승일 황예민 </p>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 d-flex flex-column justify-content-center">
+                    <p class="fairy"> 요리의 정원 </p>
+                    <p class="fairy"> 2024 By fairies </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/toggleMenu.js"></script>
+    <script src="static/js/fonts.js"></script>
+    <script src="static/js/mypagemain.js"></script>
+</body>
+</html>
+

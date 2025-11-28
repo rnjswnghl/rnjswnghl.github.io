@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - 요리의 정원</title>
+    <link rel="stylesheet" href="static/css/layout.css">
+    <link rel="stylesheet" href="static/css/cooktip.css">
+    <link rel="stylesheet" href="static/css/signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
+    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+</head>
+<body>
+    <div class="background-container">
+        <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+        <header>
+            <div class="point-font main-title" onclick="window.location.href='index.html'">요리의 정원</div>
+        </header>
+
+        <div id="menu" class="menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">×</a>   
+            <div class="profile">
+                <span>Guest</span>
+            </div>
+            <div class="menu-basictag">
+                <a href="index.html">Home</a>
+                <a href="recipe_main.html">레시피</a>
+                <a href="cooktip.html">요리 꿀팁</a>
+                <a href="login.html">로그인</a>
+                <a href="signup.html">회원가입</a>
+                <a href="recipe_register.html">레시피 작성</a>
+                <a href="mypagemain.html">마이페이지</a>
+            </div>
+            <div class="menu-buttons">
+                <button onclick="window.location.href='login.html'">로그인</button>
+                <button onclick="window.location.href='signup.html'">회원가입</button>
+            </div>
+        </div>
+
+        <main class="wrapper">
+            <div class="content">
+                <div class="container-for-signup">
+                    <div class="signup-container">
+                        <h2 class="korean-font">개인정보 입력</h2>
+                        <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
+                            <p style="margin: 0; color: #856404; font-size: 0.9rem;">
+                                ⚠️ 데모 버전: 회원가입 기능은 작동하지 않습니다.
+                            </p>
+                        </div>
+                        <form onsubmit="event.preventDefault(); alert('데모 버전에서는 회원가입할 수 없습니다.');">
+                            <div class="input-group">
+                                <div class="profile-picture-container">
+                                    <div class="profile-picture-preview-wrapper">
+                                        <img id="profile-picture-preview" class="profile-picture-preview" src="static/images/profile_basic.image.png" alt="프로필 사진" />
+                                    </div>                    
+                                    <div class="upload-text-container">
+                                        <input type="file" id="profile-picture" name="profile-picture" accept="image/*" onchange="previewProfilePicture(event)">
+                                        <label for="profile-picture" class="upload-text korean-font">이미지 업로드</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="real_name" class="korean-font">이름</label>
+                                <input type="text" id="real_name" name="real_name" placeholder="이름을 입력하세요">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="korean-font">성별</label>
+                                <div class="gender-group">
+                                    <label class="gender-option"><input type="radio" name="gender" value="male"> 남성</label>
+                                    <label class="gender-option"><input type="radio" name="gender" value="female"> 여성</label>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="birthdate" class="korean-font">생년월일</label>
+                                <input type="date" id="birthdate" name="birthdate">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="phone_number" class="korean-font">전화번호</label>
+                                <input type="text" id="phone_number" name="phone_number" placeholder="010-1234-5678">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="email" class="korean-font">이메일</label>
+                                <input type="email" id="email" name="email" placeholder="example@email.com">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="username" class="korean-font">아이디</label>
+                                <input type="text" id="username" name="username" placeholder="아이디를 입력하세요">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="password" class="korean-font">비밀번호</label>
+                                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="confirm_password" class="korean-font">비밀번호 확인</label>
+                                <input type="password" id="confirm_password" name="confirm_password" placeholder="비밀번호를 다시 입력하세요">
+                            </div>
+
+                            <button type="submit" class="korean-font">회원가입</button>
+                        </form>
+                        <div class="ask">
+                            <p>이미 계정이 있으신가요?</p>&nbsp;<a href="login.html" class="login-link">로그인</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                    <img src="static/images/smartbusan_logo.png" alt="digital smart busan logo" class="footer-logo">
+                    <a class="footer-a" href="https://github.com/ggabaegii/RecipeRecommendation" target="_blank">&nbsp;&nbsp;Github</a>
+                    <p class="fairy"> Fairies 김소희 권주회 임수현 조승일 황예민 </p>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 d-flex flex-column justify-content-center">
+                    <p class="fairy"> 요리의 정원 </p>
+                    <p class="fairy"> 2024 By fairies </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/toggleMenu.js"></script>
+    <script src="static/js/fonts.js"></script>
+    <script>
+        function previewProfilePicture(event) {
+            const preview = document.getElementById('profile-picture-preview');
+            if (event.target.files && event.target.files[0]) {
+                preview.src = URL.createObjectURL(event.target.files[0]);
+                preview.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
+

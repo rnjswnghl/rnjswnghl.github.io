@@ -1,0 +1,65 @@
+[
+  {
+    "model": "books.category",
+    "pk": 1,
+    "fields": {
+      "name": "소설/시/희곡"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 2,
+    "fields": {
+      "name": "기타"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 3,
+    "fields": {
+      "name": "자기계발"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 4,
+    "fields": {
+      "name": "사회과학"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 5,
+    "fields": {
+      "name": "컴퓨터/모바일"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 6,
+    "fields": {
+      "name": "경제경영"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 7,
+    "fields": {
+      "name": "인문학"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 8,
+    "fields": {
+      "name": "건강/취미"
+    }
+  },
+  {
+    "model": "books.category",
+    "pk": 9,
+    "fields": {
+      "name": "역사"
+    }
+  }
+]

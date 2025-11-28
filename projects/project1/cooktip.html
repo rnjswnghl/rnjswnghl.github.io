@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>요리 꿀팁 - 요리의 정원</title>
+    <link rel="stylesheet" href="static/css/layout.css">
+    <link rel="stylesheet" href="static/css/cooktip.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
+    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+</head>
+<body>
+    <div class="background-container">
+        <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+        <header>
+            <div class="point-font main-title" onclick="window.location.href='index.html'">요리의 정원</div>
+        </header>
+
+        <div id="menu" class="menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">×</a>   
+            <div class="profile">
+                <span>Guest</span>
+            </div>
+            <div class="menu-basictag">
+                <a href="index.html">Home</a>
+                <a href="recipe_main.html">레시피</a>
+                <a href="cooktip.html">요리 꿀팁</a>
+                <a href="login.html">로그인</a>
+                <a href="signup.html">회원가입</a>
+                <a href="recipe_register.html">레시피 작성</a>
+                <a href="mypagemain.html">마이페이지</a>
+            </div>
+            <div class="menu-buttons">
+                <button onclick="window.location.href='login.html'">로그인</button>
+                <button onclick="window.location.href='signup.html'">회원가입</button>
+            </div>
+        </div>
+
+        <main class="wrapper">
+            <div class="content">
+                <div class="navigation">
+                    <a href="#">특산물</a>
+                    <a href="cooktip.html" class="active">요리 꿀팁</a>
+                </div>
+
+                <div class="category-tabs">
+                    <button onclick="showCategory('preparation')">손질법</button>
+                    <button onclick="showCategory('storage')">보관법</button>
+                    <button onclick="showCategory('other')">기타 정보</button>
+                </div>
+
+                <div class="content">
+                    <div id="preparation" class="category-content">
+                        <div class="row">
+                            <div class="col-lg-6 mb-4">
+                                <div class="item-box border p-3 text-center">
+                                    <img src="static/images/mascot.jpg" alt="손질법 1" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <hr>
+                                    <h3>양파 손질법</h3>
+                                    <p>양파를 깔끔하게 손질하는 방법을 알아봅시다.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                <div class="item-box border p-3 text-center">
+                                    <img src="static/images/mascot.jpg" alt="손질법 2" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <hr>
+                                    <h3>당근 손질법</h3>
+                                    <p>당근을 효율적으로 손질하는 팁입니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="storage" class="category-content" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="item-box border p-3 text-center">
+                                    <img src="static/images/mascot.jpg" alt="보관법 1" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <hr>
+                                    <h3>야채 보관법</h3>
+                                    <p>야채를 오래 신선하게 보관하는 방법입니다.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="item-box border p-3 text-center">
+                                    <img src="static/images/mascot.jpg" alt="보관법 2" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <hr>
+                                    <h3>육류 보관법</h3>
+                                    <p>육류를 안전하게 보관하는 방법입니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="other" class="category-content" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="item-box border p-3 text-center">
+                                    <img src="static/images/mascot.jpg" alt="기타정보 1" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <hr>
+                                    <h3>요리 도구 추천</h3>
+                                    <p>필수 요리 도구를 알아봅시다.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="item-box border p-3 text-center">
+                                    <img src="static/images/mascot.jpg" alt="기타정보 2" class="img-fluid" style="max-height: 200px; object-fit: cover;">
+                                    <hr>
+                                    <h3>요리 시간 절약 팁</h3>
+                                    <p>요리 시간을 줄이는 유용한 팁입니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                    <img src="static/images/smartbusan_logo.png" alt="digital smart busan logo" class="footer-logo">
+                    <a class="footer-a" href="https://github.com/ggabaegii/RecipeRecommendation" target="_blank">&nbsp;&nbsp;Github</a>
+                    <p class="fairy"> Fairies 김소희 권주회 임수현 조승일 황예민 </p>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 d-flex flex-column justify-content-center">
+                    <p class="fairy"> 요리의 정원 </p>
+                    <p class="fairy"> 2024 By fairies </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/toggleMenu.js"></script>
+    <script src="static/js/fonts.js"></script>
+    <script src="static/js/cooktip.js"></script>
+</body>
+</html>
+

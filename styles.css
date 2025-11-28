@@ -1030,6 +1030,190 @@ section {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
+/* Project Modal */
+.project-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.project-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    position: relative;
+    width: 95%;
+    max-width: 1400px;
+    height: 90vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2001;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    z-index: 2002;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: rotate(90deg);
+}
+
+.modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-light);
+    background: rgba(248, 250, 252, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.modal-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+#projectFrame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.modal-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    z-index: 10;
+}
+
+.modal-loading.hidden {
+    display: none;
+}
+
+.modal-loading .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--bg-secondary);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.modal-loading p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.modal-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    z-index: 10;
+    padding: 2rem;
+    text-align: center;
+}
+
+.modal-error p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.error-message {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-menu {

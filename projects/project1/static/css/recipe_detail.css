@@ -1,0 +1,275 @@
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+
+/* 기본 스타일 */
+@font-face {
+    font-family: 'basicfont'; /* 사용할 글꼴 이름 */
+    src: url('../fonts/HakgyoansimBareonbatangR.ttf') format('truetype'); /* 파일 경로와 형식 */
+}
+
+/* 외할머니 글씨 (한글) */
+.point-font {
+    font-family: 'basicfont', sans-serif;
+}
+
+/* 본문 글씨 */
+/* .korean-font {
+    font-family: "Wanted Sans Variable", "Wanted Sans", sans-serif;
+} */
+
+/* Marcellus (영어) */
+.english-font {
+    font-family: 'Marcellus', serif;
+}
+
+/* 기본 스타일 */
+body {
+    font-family: "Wanted Sans Variable", "Wanted Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* 페이지 제목 스타일 */
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    color: #042C57;
+    margin-top: 15px;
+    margin-bottom: 40px;
+}
+
+.dish-name{
+    font-weight: 500!;
+}
+
+/* 메뉴 아이콘 스타일 */
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+/* 로고 텍스트 스타일 */
+.logo-text {
+    font-size: 36px;
+    font-weight: bold;
+    color: #042C57;
+    text-align: center;
+    display: block;
+    margin: 20px auto;
+    text-decoration: none;
+}
+
+/* 콘텐츠 영역 */
+.recipe-content {
+    /* width: 50%; */
+    margin: 0 auto;
+    padding: 20px;
+    /* display: block; */
+    text-align: left;
+    background-color: #fff;
+    opacity: 1; /* 투명도 설정 (0.5는 50% 투명) */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 레시피 이미지 스타일 */
+.recipe-image img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* 레시피 정보 섹션 스타일 */
+.recipe-info {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.recipe-info h2 {
+    font-size: 24px;
+    color: #042C57;
+}
+
+.recipe-info hr {
+    border: none;
+    border-top: 1px solid #042C57;
+    margin: 10px 0;
+}
+
+/* 재료 목록 스타일 */
+.ingredients, .cooking-steps, .hashtags {
+    margin-bottom: 20px;
+}
+
+.ingredients h3, .cooking-steps h3, .hashtags h3 {
+    font-size: 20px;
+    color: #042C57;
+    border-bottom: 1px solid #bea2a1;
+    padding-bottom: 5px;
+}
+
+.ingredients ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.ingredients li {
+    font-size: 16px;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 15px;
+}
+
+/* 재료명, 재료량 스타일 */
+.ingredient-name {
+    font-weight: bold;
+    color: #042C57;
+    flex: 2;
+}
+
+.ingredient-amount {
+    color: #777;
+    flex: 1;
+    text-align: right;
+}
+
+/* 체크박스 스타일 */
+.ingredient-checkbox {
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+/* 말풍선 스타일 */
+.tooltip {
+    opacity: 0.8 !important; /* `opacity: 0`를 덮어씁니다 */
+    display: none;
+    position: absolute;
+    background-color: black;
+    color: white; /* 흰색 글자 */
+    padding: 2px 6px; /* 말풍선 패딩 */
+    border-radius: 5px; /* 둥근 모서리 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    font-size: 14px; /* 글씨 크기 */
+    z-index: 1000;
+    top: -5px; 
+    left: 40%;
+    transform: translateX(-30%);
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+
+/* 사용자 정보 및 상호작용 아이콘 */
+.user-interaction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #bea2a1;
+}
+
+.user-interaction .profile {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #042C57;
+    margin-bottom: 10px;
+}
+
+.user-interaction .profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.icons {
+    display: flex;
+    gap: 20px;
+}
+
+.icon {
+    font-size: 24px;
+    cursor: pointer;
+    color: #042C57;
+}
+
+/* ---------------------------댓글 섹션 -----------------------------------------*/
+.comments {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #bea2a1;
+}
+
+.comments h3 {
+    font-size: 20px;
+    color: #042C57;
+    margin-bottom: 10px;
+}
+
+/* 댓글 목록 스타일 */
+.comment-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.comment-list li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #042C57;
+    display: flex;
+    align-items: baseline;
+}
+
+.comment-author {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.comment-text {
+    color: #333;
+}
+
+/* 댓글 입력창 */
+.comment-input-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #bea2a1;
+    border-radius: 5px;
+    outline: none;
+}
+
+.comment-input:focus {
+    border-color: #042C57;
+    box-shadow: 0 0 5px rgba(4, 44, 87, 0.5);
+}
+
+/* 댓글 추가 버튼 */
+.comment-submit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #042C57;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-submit-button:hover {
+    background-color: #0353a4;
+}

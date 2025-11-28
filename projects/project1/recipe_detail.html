@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레시피 상세 - 요리의 정원</title>
+    <link rel="stylesheet" href="static/css/layout.css">
+    <link rel="stylesheet" href="static/css/recipe_detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
+    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
+</head>
+<body>
+    <div class="background-container">
+        <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+        <header>
+            <div class="point-font main-title" onclick="window.location.href='index.html'">요리의 정원</div>
+        </header>
+
+        <div id="menu" class="menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">×</a>   
+            <div class="profile">
+                <span>Guest</span>
+            </div>
+            <div class="menu-basictag">
+                <a href="index.html">Home</a>
+                <a href="recipe_main.html">레시피</a>
+                <a href="cooktip.html">요리 꿀팁</a>
+                <a href="login.html">로그인</a>
+                <a href="signup.html">회원가입</a>
+                <a href="recipe_register.html">레시피 작성</a>
+                <a href="mypagemain.html">마이페이지</a>
+            </div>
+            <div class="menu-buttons">
+                <button onclick="window.location.href='login.html'">로그인</button>
+                <button onclick="window.location.href='signup.html'">회원가입</button>
+            </div>
+        </div>
+
+        <main class="wrapper">
+            <div class="content">
+                <div class="recipe-content col-lg-6 col-md-6 col-sm-8 col-xs-8">
+                    <button onclick="window.location.href='recipe_main.html'" style="margin-bottom: 20px; padding: 10px 20px; background: #042C57; color: white; border: none; border-radius: 5px; cursor: pointer;">← 레시피 목록으로</button>
+                    
+                    <h1 class="page-title">레시피 상세 페이지</h1>
+
+                    <section class="recipe-info">
+                        <h2 class="dish-name">요리 이름: 김치찌개</h2>
+                        <hr>
+                        <p><strong>요리 카테고리:</strong> 한식</p>
+                        <p><strong>소요 시간:</strong> 30분</p>
+                        <p><strong>난이도:</strong> 쉬움</p>
+                    </section>
+
+                    <section class="ingredients">
+                        <h3>재료</h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
+                                <span class="ingredient-name">김치 200g</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
+                                <span class="ingredient-name">돼지고기 100g</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
+                                <span class="ingredient-name">두부 1/2모</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
+                                <span class="ingredient-name">대파 1대</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
+                                <span class="ingredient-name">물 500ml</span>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="cooking-steps">
+                        <h3>조리 방법</h3>
+                        <p>1. 돼지고기를 볶아 기름을 내줍니다.</p>
+                        <p>2. 김치를 넣고 볶아줍니다.</p>
+                        <p>3. 물을 넣고 끓여줍니다.</p>
+                        <p>4. 두부와 대파를 넣고 마무리합니다.</p>
+                    </section>
+
+                    <section class="user-interaction">
+                        <div class="icons">
+                            <span class="icon share" onclick="shareRecipe()">🔗</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                    <img src="static/images/smartbusan_logo.png" alt="digital smart busan logo" class="footer-logo">
+                    <a class="footer-a" href="https://github.com/ggabaegii/RecipeRecommendation" target="_blank">&nbsp;&nbsp;Github</a>
+                    <p class="fairy"> Fairies 김소희 권주회 임수현 조승일 황예민 </p>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 d-flex flex-column justify-content-center">
+                    <p class="fairy"> 요리의 정원 </p>
+                    <p class="fairy"> 2024 By fairies </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/toggleMenu.js"></script>
+    <script src="static/js/fonts.js"></script>
+    <script src="static/js/recipe_detail.js"></script>
+    <script>
+        function toggleTooltip(event, message) {
+            alert(message);
+        }
+        function shareRecipe() {
+            alert('레시피 공유 기능은 데모 버전에서 사용할 수 없습니다.');
+        }
+    </script>
+</body>
+</html>
+

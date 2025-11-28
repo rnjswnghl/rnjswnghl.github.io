@@ -196,19 +196,20 @@
             <div class="projects-grid">
                 <div class="project-card" data-project-path="projects/project1/index.html">
                     <div class="project-image">
-                        <div class="project-placeholder">프로젝트 1</div>
+                        <div class="project-placeholder">요리의 정원</div>
                     </div>
                     <div class="project-content">
-                        <h3>프로젝트 제목 1</h3>
-                        <p>프로젝트에 대한 간단한 설명이 들어갑니다. 주요 기능과 기술 스택을 설명합니다.</p>
+                        <h3>요리의 정원</h3>
+                        <p>재료 사진 인식 레시피 추천 프로그램. YOLOv11로 재료를 인식하고 Gemini API를 통해 레시피를 추천하는 웹 서비스입니다.</p>
                         <div class="project-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">MongoDB</span>
+                            <span class="tag">Flask</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">YOLOv11</span>
+                            <span class="tag">Gemini API</span>
                         </div>
                         <div class="project-links">
                             <a href="#" class="project-link view-project" data-project-path="projects/project1/index.html">프로젝트 보기</a>
-                            <a href="#" class="project-link" target="_blank">GitHub</a>
+                            <a href="https://github.com/ggabaegii/RecipeRecommendation" class="project-link" target="_blank">GitHub</a>
                         </div>
                     </div>
                 </div>
@@ -315,6 +316,28 @@
             </div>
         </div>
     </section>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="project-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalTitle">프로젝트 미리보기</h2>
+            </div>
+            <div class="modal-body">
+                <iframe id="projectFrame" src="" frameborder="0"></iframe>
+                <div class="modal-loading">
+                    <div class="spinner"></div>
+                    <p>프로젝트를 불러오는 중...</p>
+                </div>
+                <div class="modal-error" style="display: none;">
+                    <p>프로젝트를 불러올 수 없습니다.</p>
+                    <p class="error-message">프로젝트 폴더에 index.html 파일이 있는지 확인해주세요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
