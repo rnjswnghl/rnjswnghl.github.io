@@ -40,9 +40,18 @@ const routes = [
 
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL || '/'),
   routes,
 });
+
+// 초기 로드 시 메인 페이지로 이동 보장
+router.isReady().then(() => {
+  const currentPath = router.currentRoute.value.path
+  // 경로가 비어있거나 index.html이면 메인 페이지로 이동
+  if (currentPath === '' || currentPath === '/index.html' || (currentPath !== '/' && !routes.some(r => r.path === currentPath))) {
+    router.replace('/')
+  }
+})
 
 // 네비게이션 가드: 로그인 필요 페이지는 로그인 안 되어 있으면 /login으로 이동
 router.beforeEach((to, from, next) => {

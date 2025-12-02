@@ -94,8 +94,10 @@ const currentFolder = ref(null)
 const isLoggedIn = ref(false)
 const isBookmarked = ref(false)
 
+import { safeStorage } from '@/utils/storage'
+
 const checkLoginStatus = () => {
-  const token = localStorage.getItem('accessToken')
+  const token = safeStorage.getItem('accessToken')
   isLoggedIn.value = !!token
 }
 
@@ -105,14 +107,14 @@ const checkBookmarkStatus = async () => {
   try {
     const { data } = await axios.get(`/api/books/bookmarks/check/${book.value.id}/`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
       }
     })
     isBookmarked.value = data.is_bookmarked
   } catch (error) {
     if (error.response?.status === 401) {
       // 토큰이 만료된 경우
-      localStorage.removeItem('accessToken')
+      safeStorage.removeItem('accessToken')
       isLoggedIn.value = false
       alert('로그인이 만료되었습니다. 다시 로그인해주세요.')
     } else {
@@ -135,7 +137,7 @@ const handleBookmarkClick = async () => {
         // 북마크 ID를 찾기 위한 API 호출
         const { data: bookmarks } = await axios.get('/api/books/bookmarks/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
           }
         })
         
@@ -148,7 +150,7 @@ const handleBookmarkClick = async () => {
         // 북마크 삭제
         await axios.delete(`/api/books/bookmarks/${bookmark.id}/`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
           }
         })
         isBookmarked.value = false
@@ -168,7 +170,7 @@ const fetchFolders = async () => {
   try {
     const { data } = await axios.get('/api/books/folders/', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
       }
     })
     folders.value = data
@@ -181,17 +183,104 @@ const fetchFolders = async () => {
   }
 }
 
+// 이미지 import
+import cover1 from '@/assets/cover/불편한편의점.jpg'
+import cover2 from '@/assets/cover/달러구트꿈백화점.jpg'
+import cover3 from '@/assets/cover/미드나잇라이브러리.jpg'
+import cover4 from '@/assets/cover/코스모스.jpg'
+import cover5 from '@/assets/cover/해커와화가.jpg'
+import cover6 from '@/assets/cover/클린코드.jpg'
+
+// 목데이터 (더 상세한 정보 포함)
+const mockBooks = {
+  1: {
+    id: 1,
+    title: '불편한 편의점',
+    author: '김호연',
+    cover: cover1,
+    customer_review_rank: 1,
+    category: { id: 1, name: '소설/시/희곡' },
+    publisher: '나무옆의자',
+    publishedDate: '2021-04-20',
+    pubdate: '2021-04-20',
+    isbn: '9791161571188',
+    description: '편의점에서 일하며 만나는 다양한 사람들의 이야기. 각자의 사연을 가진 사람들이 편의점을 통해 만나고, 서로의 삶에 영향을 미치는 따뜻한 이야기를 담고 있습니다. 작은 공간에서 펼쳐지는 인간애와 공감의 메시지가 인상적인 작품입니다.'
+  },
+  2: {
+    id: 2,
+    title: '달러구트 꿈 백화점',
+    author: '이미예',
+    cover: cover2,
+    customer_review_rank: 2,
+    category: { id: 1, name: '소설/시/희곡' },
+    publisher: '팩토리나인',
+    publishedDate: '2020-07-08',
+    pubdate: '2020-07-08',
+    isbn: '9791161571189',
+    description: '꿈을 판매하는 특별한 백화점의 이야기. 사람들이 잃어버린 꿈을 찾고, 새로운 꿈을 사는 마법 같은 공간에서 펼쳐지는 감동적인 이야기입니다. 상상력이 풍부하고 독특한 설정이 매력적인 작품으로, 꿈과 현실을 넘나드는 작가의 작품 세계를 만날 수 있습니다.'
+  },
+  3: {
+    id: 3,
+    title: '미드나잇 라이브러리',
+    author: '매트 헤이그',
+    cover: cover3,
+    customer_review_rank: 3,
+    category: { id: 1, name: '소설/시/희곡' },
+    publisher: '인플루엔셜',
+    publishedDate: '2021-03-15',
+    pubdate: '2021-03-15',
+    isbn: '9791161571190',
+    description: '인생의 무한한 가능성을 탐구하는 소설. 주인공이 다양한 인생을 경험하며 진정한 삶의 의미를 찾아가는 과정을 그린 작품입니다. 후회와 선택에 대해 깊이 생각해볼 수 있는 작품으로, 인생의 다양한 가능성을 보여주는 감동적인 이야기입니다.'
+  },
+  4: {
+    id: 4,
+    title: '코스모스',
+    author: '칼 세이건',
+    cover: cover4,
+    customer_review_rank: 4,
+    category: { id: 2, name: '인문학' },
+    publisher: '사이언스북스',
+    publishedDate: '2006-12-20',
+    pubdate: '2006-12-20',
+    isbn: '9788983711892',
+    description: '우주와 인간에 대한 깊이 있는 탐구. 우주의 신비와 인간의 위치를 과학적이고 철학적으로 탐구한 명작입니다. 우주의 광대함과 인간의 작은 존재에 대해 깊이 생각해볼 수 있는 작품으로, 과학과 철학이 만나는 작품입니다.'
+  },
+  5: {
+    id: 5,
+    title: '해커와 화가',
+    author: '폴 그레이엄',
+    cover: cover5,
+    customer_review_rank: 5,
+    category: { id: 5, name: '컴퓨터/모바일' },
+    publisher: '한빛미디어',
+    publishedDate: '2011-06-20',
+    pubdate: '2011-06-20',
+    isbn: '9788966260951',
+    description: '프로그래밍과 창의성에 대한 통찰. 프로그래머의 사고방식과 창의적인 문제 해결 방법에 대해 이야기합니다. Y Combinator의 공동 창립자인 작가가 프로그래밍과 창의성, 스타트업에 대한 통찰을 담은 작품입니다.'
+  },
+  6: {
+    id: 6,
+    title: '클린 코드',
+    author: '로버트 C. 마틴',
+    cover: cover6,
+    customer_review_rank: 6,
+    category: { id: 5, name: '컴퓨터/모바일' },
+    publisher: '인사이트',
+    publishedDate: '2013-12-24',
+    pubdate: '2013-12-24',
+    isbn: '9788966260952',
+    description: '읽기 좋고 깨끗한 코드를 작성하는 방법. 좋은 코드의 원칙과 실천 방법을 제시하는 프로그래밍 필독서입니다. 소프트웨어 엔지니어링 분야의 권위자인 작가가 코드의 품질이 얼마나 중요한지, 그리고 어떻게 좋은 코드를 작성할 수 있는지에 대해 설명합니다.'
+  }
+}
+
 const fetchBookDetail = async (id) => {
-  try {
-    const token = localStorage.getItem('accessToken')
-    const headers = token ? { Authorization: `Bearer ${token}` } : {}
-    const response = await axios.get(`/api/books/book-list/${id}/`, { headers })
-    book.value = response.data
-    if (token) {
-      await checkBookmarkStatus()
-    }
-  } catch (error) {
-    console.error('책 정보를 불러오는데 실패했습니다.', error)
+  // 백엔드 없이 목데이터만 사용
+  const bookId = parseInt(id)
+  if (mockBooks[bookId]) {
+    book.value = mockBooks[bookId]
+  } else {
+    // 기본값으로 첫 번째 책 사용
+    book.value = mockBooks[1]
   }
 }
 
@@ -203,7 +292,7 @@ const createFolder = async () => {
       name: newFolderName.value
     }, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access')}`
+        Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
       }
     })
     folders.value.push(data)
@@ -229,7 +318,7 @@ const updateFolder = async () => {
       name: editFolderName.value
     }, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access')}`
+        Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
       }
     })
     const index = folders.value.findIndex(f => f.id === currentFolder.value.id)
@@ -254,7 +343,7 @@ const deleteFolder = async (folder) => {
   try {
     await axios.delete(`/api/books/folders/${folder.id}/`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access')}`
+        Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
       }
     })
     folders.value = folders.value.filter(f => f.id !== folder.id)
@@ -276,7 +365,7 @@ const saveBookmark = async () => {
       folder_id: selectedFolderId.value
     }, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access')}`
+        Authorization: `Bearer ${safeStorage.getItem('accessToken')}`
       }
     })
     showBookmarkFormModal.value = false

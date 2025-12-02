@@ -265,44 +265,57 @@ const handleImageError = (e) => {
   e.target.src = ''  // 이미지 로드 실패시 기본 아이콘 표시
 }
 
+// 목데이터 - 사용자 프로필
+const mockUserProfiles = {
+  'testuser': {
+    id: 1,
+    username: 'testuser',
+    email: 'test@example.com',
+    bio: '테스트 사용자입니다. 독서를 좋아합니다.',
+    photo_url: '',
+    followers: [],
+    followings: [],
+    followers_count: 5,
+    following_count: 3
+  }
+}
+
 const fetchUserInfo = async () => {
-  try {
-    // 현재 로그인한 사용자 정보 가져오기
-    const { data: currentUserData } = await api.get('accounts/current/')
-    currentUser.value = currentUserData
+  // 백엔드 없이 목데이터만 사용
+  const { useUserStore } = await import('@/stores/user')
+  const userStore = useUserStore()
+  
+  // 현재 로그인한 사용자 정보
+  if (userStore.userProfile) {
+    currentUser.value = userStore.userProfile
+  } else {
+    // 로그인하지 않은 경우 기본값
+    currentUser.value = { username: '' }
+  }
 
-    // 프로필 정보 가져오기 (다른 사용자 또는 자신의 프로필)
-    const url = username.value ? `accounts/profile/${username.value}/` : 'accounts/profile/'
-    const { data: profileData } = await api.get(url)
-    userInfo.value = profileData
+  // 프로필 정보 가져오기
+  const targetUsername = username.value || currentUser.value.username || 'testuser'
+  const profileData = mockUserProfiles[targetUsername] || mockUserProfiles['testuser']
+  userInfo.value = { ...profileData }
 
-    // 이미지 URL이 상대 경로인 경우 절대 경로로 변환
-    if (userInfo.value.photo_url && !userInfo.value.photo_url.startsWith('http')) {
-      userInfo.value.photo_url = `${import.meta.env.VITE_API_URL}${userInfo.value.photo_url}`
-    }
+  // 팔로우 상태는 기본값 false
+  isFollowing.value = false
 
-    // 팔로우 상태 확인
-    if (profileData.is_following !== undefined) {
-      isFollowing.value = profileData.is_following
-    }
-
-    // 자신의 프로필인 경우에만 북마크 폴더 가져오기
-    if (!username.value || username.value === currentUserData.username) {
-      await fetchFolders()
-    }
-  } catch (error) {
-    console.error('사용자 정보 로딩 실패', error)
+  // 자신의 프로필인 경우에만 북마크 폴더 가져오기
+  if (!username.value || username.value === currentUser.value.username) {
+    await fetchFolders()
   }
 }
 
 const toggleFollow = async () => {
-  try {
-    await api.post(`accounts/follow/${userInfo.value.id}/`)
-    isFollowing.value = !isFollowing.value
-    await fetchUserInfo()
-  } catch (error) {
-    console.error('팔로우/언팔로우 실패', error)
+  // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+  isFollowing.value = !isFollowing.value
+  if (isFollowing.value) {
+    userInfo.value.followers_count += 1
+  } else {
+    userInfo.value.followers_count = Math.max(0, userInfo.value.followers_count - 1)
   }
+  alert(`팔로우 상태가 변경되었습니다. (데모 모드: 실제로 저장되지 않습니다)`)
 }
 
 const handleProfileUpdate = async () => {
@@ -315,17 +328,63 @@ const handleAccountDeleted = () => {
   router.push('/login')
 }
 
-const fetchFolders = async () => {
-  try {
-    const { data } = await api.get('books/folders/')
-    folders.value = data
-    // 각 폴더의 초기 상태를 false로 설정
-    data.forEach(folder => {
-      expandedFolders.value[folder.id] = false
-    })
-  } catch (error) {
-    console.error('폴더 목록 로딩 실패', error)
+// 이미지 import
+import cover1 from '@/assets/cover/불편한편의점.jpg'
+import cover2 from '@/assets/cover/달러구트꿈백화점.jpg'
+import cover3 from '@/assets/cover/미드나잇라이브러리.jpg'
+
+// 목데이터 - 북마크 폴더
+const mockFolders = [
+  {
+    id: 1,
+    name: '읽고 싶은 책',
+    bookmarks: [
+      {
+        id: 1,
+        book: {
+          id: 1,
+          title: '불편한 편의점',
+          author: '김호연',
+          cover: cover1
+        },
+        folder: { id: 1 }
+      },
+      {
+        id: 2,
+        book: {
+          id: 2,
+          title: '달러구트 꿈 백화점',
+          author: '이미예',
+          cover: cover2
+        },
+        folder: { id: 1 }
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: '읽은 책',
+    bookmarks: [
+      {
+        id: 3,
+        book: {
+          id: 3,
+          title: '미드나잇 라이브러리',
+          author: '매트 헤이그',
+          cover: cover3
+        },
+        folder: { id: 2 }
+      }
+    ]
   }
+]
+
+const fetchFolders = async () => {
+  // 백엔드 없이 목데이터만 사용
+  folders.value = mockFolders.map(f => ({ ...f }))
+  folders.value.forEach(folder => {
+    expandedFolders.value[folder.id] = false
+  })
 }
 
 const toggleFolder = (folderId) => {
@@ -335,18 +394,17 @@ const toggleFolder = (folderId) => {
 const createFolder = async () => {
   if (!newFolderName.value.trim()) return
 
-  try {
-    const { data } = await api.post('books/folders/', {
-      name: newFolderName.value
-    })
-    folders.value.push(data)
-    expandedFolders.value[data.id] = false
-    newFolderName.value = ''
-    showCreateFolderModal.value = false
-  } catch (error) {
-    console.error('폴더 생성 실패', error)
-    alert('폴더 생성에 실패했습니다.')
+  // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+  const newFolder = {
+    id: Date.now(),
+    name: newFolderName.value,
+    bookmarks: []
   }
+  folders.value.push(newFolder)
+  expandedFolders.value[newFolder.id] = false
+  newFolderName.value = ''
+  showCreateFolderModal.value = false
+  alert('폴더가 생성되었습니다. (데모 모드: 실제로 저장되지 않습니다)')
 }
 
 const editFolder = (folder) => {
@@ -358,19 +416,13 @@ const editFolder = (folder) => {
 const updateFolder = async () => {
   if (!editFolderName.value.trim()) return
 
-  try {
-    const { data } = await api.put(`books/folders/${currentBookmark.value.id}/`, {
-      name: editFolderName.value
-    })
-    const index = folders.value.findIndex(f => f.id === data.id)
-    if (index !== -1) {
-      folders.value[index] = data
-    }
-    showEditFolderModal.value = false
-  } catch (error) {
-    console.error('폴더 수정 실패', error)
-    alert('폴더 수정에 실패했습니다.')
+  // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+  const index = folders.value.findIndex(f => f.id === currentBookmark.value.id)
+  if (index !== -1) {
+    folders.value[index].name = editFolderName.value
   }
+  showEditFolderModal.value = false
+  alert('폴더가 수정되었습니다. (데모 모드: 실제로 저장되지 않습니다)')
 }
 
 const confirmDeleteFolder = (folder) => {
@@ -380,14 +432,10 @@ const confirmDeleteFolder = (folder) => {
 }
 
 const deleteFolder = async (folder) => {
-  try {
-    await api.delete(`books/folders/${folder.id}/`)
-    folders.value = folders.value.filter(f => f.id !== folder.id)
-    delete expandedFolders.value[folder.id]
-  } catch (error) {
-    console.error('폴더 삭제 실패', error)
-    alert('폴더 삭제에 실패했습니다.')
-  }
+  // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+  folders.value = folders.value.filter(f => f.id !== folder.id)
+  delete expandedFolders.value[folder.id]
+  alert('폴더가 삭제되었습니다. (데모 모드: 실제로 삭제되지 않습니다)')
 }
 
 const openMoveModal = (bookmark) => {
@@ -405,17 +453,21 @@ const closeMoveModal = () => {
 const moveBookmark = async () => {
   if (!selectedFolderId.value || !currentBookmark.value) return
 
-  try {
-    await api.put(`books/bookmarks/${currentBookmark.value.id}/`, {
-      folder_id: selectedFolderId.value
-    })
-    // 폴더 목록 새로고침
-    await fetchFolders()
-    isMoveModalVisible.value = false
-  } catch (error) {
-    console.error('북마크 이동 실패', error)
-    alert('북마크 이동에 실패했습니다.')
+  // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+  const targetFolder = folders.value.find(f => f.id === selectedFolderId.value)
+  const sourceFolder = folders.value.find(f => f.bookmarks.some(b => b.id === currentBookmark.value.id))
+  
+  if (targetFolder && sourceFolder) {
+    const bookmarkIndex = sourceFolder.bookmarks.findIndex(b => b.id === currentBookmark.value.id)
+    if (bookmarkIndex !== -1) {
+      const bookmark = sourceFolder.bookmarks.splice(bookmarkIndex, 1)[0]
+      bookmark.folder.id = selectedFolderId.value
+      targetFolder.bookmarks.push(bookmark)
+    }
   }
+  
+  isMoveModalVisible.value = false
+  alert('북마크가 이동되었습니다. (데모 모드: 실제로 저장되지 않습니다)')
 }
 
 const confirmDeleteBookmark = (bookmark) => {
@@ -425,14 +477,12 @@ const confirmDeleteBookmark = (bookmark) => {
 }
 
 const deleteBookmark = async (bookmark) => {
-  try {
-    await api.delete(`books/bookmarks/${bookmark.id}/`)
-    // 폴더 목록 새로고침
-    await fetchFolders()
-  } catch (error) {
-    console.error('북마크 삭제 실패', error)
-    alert('북마크 삭제에 실패했습니다.')
+  // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+  const folder = folders.value.find(f => f.bookmarks.some(b => b.id === bookmark.id))
+  if (folder) {
+    folder.bookmarks = folder.bookmarks.filter(b => b.id !== bookmark.id)
   }
+  alert('북마크가 삭제되었습니다. (데모 모드: 실제로 삭제되지 않습니다)')
 }
 
 const goToBookDetail = (bookId) => {

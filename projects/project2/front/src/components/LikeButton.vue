@@ -20,15 +20,14 @@
   const likeCount = ref(props.initialLikeCount)
   
   async function toggleLike() {
-    try {
-      // api.js에 맞게 경로 수정 (posts 포함)
-      const res = await api.post(`threads/posts/${props.threadId}/toggle-like/`)
-      isLiked.value = res.data.liked
-      likeCount.value = res.data.like_count
-      emit('update-like', { liked: isLiked.value, likeCount: likeCount.value })
-    } catch (error) {
-      alert('좋아요 토글 중 오류가 발생했습니다.')
+    // 백엔드 없이 목데이터만 사용
+    isLiked.value = !isLiked.value
+    if (isLiked.value) {
+      likeCount.value += 1
+    } else {
+      likeCount.value = Math.max(0, likeCount.value - 1)
     }
+    emit('update-like', { liked: isLiked.value, likeCount: likeCount.value })
   }
   </script>
   

@@ -23,37 +23,56 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/utils/api'
 import { useRouter } from 'vue-router'
 
 const categories = ref([])
 const router = useRouter()
 
+// 목데이터
+const mockCategories = [
+  { id: 1, name: '소설/시/희곡' },
+  { id: 2, name: '인문학' },
+  { id: 3, name: '경제경영' },
+  { id: 4, name: '사회과학' },
+  { id: 5, name: '컴퓨터/모바일' },
+  { id: 6, name: '자기계발' },
+  { id: 7, name: '건강/취미' },
+  { id: 8, name: '역사' },
+  { id: 9, name: '기타' }
+]
+
 onMounted(async () => {
-  try {
-    const res = await axios.get('http://localhost:8000/api/books/categories/')
-    categories.value = res.data
-  } catch (err) {
-    console.error('카테고리 로드 실패', err)
-  }
+  // 백엔드 없이 목데이터만 사용
+  categories.value = mockCategories
 })
+
+// 카테고리 이미지 import
+import 소설 from '@/assets/categories/소설.jpeg'
+import 기타 from '@/assets/categories/기타.jpg'
+import 자기계발 from '@/assets/categories/자기계발.jpg'
+import 사회과학 from '@/assets/categories/사회과학.jpeg'
+import 컴퓨터 from '@/assets/categories/컴퓨터.jpeg'
+import 경제경영 from '@/assets/categories/경제경영.jpeg'
+import 인문학 from '@/assets/categories/인문학.jpeg'
+import 건강 from '@/assets/categories/건강.jpeg'
+import 역사 from '@/assets/categories/역사.jpg'
 
 // 카테고리 이름에 따른 이미지 매핑
 function getImageUrl(categoryName) {
   const imageMap = {
-    '소설/시/희곡': '소설.jpeg',
-    '기타': '기타.jpg',
-    '자기계발': '자기계발.jpg',
-    '사회과학': '사회과학.jpeg',
-    '컴퓨터/모바일': '컴퓨터.jpeg',
-    '경제경영': '경제경영.jpeg',
-    '인문학': '인문학.jpeg',
-    '건강/취미': '건강.jpeg',
-    '역사': '역사.jpg',
+    '소설/시/희곡': 소설,
+    '기타': 기타,
+    '자기계발': 자기계발,
+    '사회과학': 사회과학,
+    '컴퓨터/모바일': 컴퓨터,
+    '경제경영': 경제경영,
+    '인문학': 인문학,
+    '건강/취미': 건강,
+    '역사': 역사,
   }
 
-  const fileName = imageMap[categoryName] || 'default.jpg'
-  return new URL(`../assets/${fileName}`, import.meta.url).href
+  return imageMap[categoryName] || 소설
 }
 
 function goToCategory(id) {

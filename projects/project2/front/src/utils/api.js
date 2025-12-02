@@ -1,17 +1,22 @@
 import axios from 'axios'
 
+// 환경 변수 또는 기본값 사용
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/'
+
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api/', // Django 서버 주소
+  baseURL: API_BASE_URL, // Django 서버 주소
   headers: {
     'Content-Type': 'application/json',
   },
   // withCredentials: true, // 세션 기반 인증일 경우 사용. (JWT 기반이므로 주석 유지)
 })
 
+import { safeStorage } from './storage'
+
 // 요청 인터셉터: localStorage에서 accessToken을 가져와 Authorization 헤더에 추가
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken') // 로그인 시 저장된 토큰
+    const token = safeStorage.getItem('accessToken') // 로그인 시 저장된 토큰
     config.headers = config.headers || {}
 
     if (token) {

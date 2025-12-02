@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/utils/api'
 
 const sortedBooks = ref([])
 const startIndex = ref(0)
@@ -51,13 +51,81 @@ const prev = () => {
   }
 }
 
-onMounted(async () => {
-  try {
-    const res = await axios.get('http://localhost:8000/api/books/book-list/')
-    sortedBooks.value = res.data.sort((a, b) => b.customer_review_rank - a.customer_review_rank)
-  } catch (error) {
-    console.error('도서 목록 불러오기 실패:', error)
+// 이미지 import
+import cover1 from '@/assets/cover/불편한편의점.jpg'
+import cover2 from '@/assets/cover/달러구트꿈백화점.jpg'
+import cover3 from '@/assets/cover/미드나잇라이브러리.jpg'
+import cover4 from '@/assets/cover/코스모스.jpg'
+import cover5 from '@/assets/cover/해커와화가.jpg'
+import cover6 from '@/assets/cover/클린코드.jpg'
+
+// 목데이터
+const mockBooks = [
+  {
+    id: 1,
+    title: '불편한 편의점',
+    author: '김호연',
+    cover: cover1,
+    customer_review_rank: 1,
+    category: { name: '소설/시/희곡' },
+    publisher: '나무옆의자',
+    publishedDate: '2021-04-20'
+  },
+  {
+    id: 2,
+    title: '달러구트 꿈 백화점',
+    author: '이미예',
+    cover: cover2,
+    customer_review_rank: 2,
+    category: { name: '소설/시/희곡' },
+    publisher: '팩토리나인',
+    publishedDate: '2020-07-08'
+  },
+  {
+    id: 3,
+    title: '미드나잇 라이브러리',
+    author: '매트 헤이그',
+    cover: cover3,
+    customer_review_rank: 3,
+    category: { name: '소설/시/희곡' },
+    publisher: '인플루엔셜',
+    publishedDate: '2021-03-15'
+  },
+  {
+    id: 4,
+    title: '코스모스',
+    author: '칼 세이건',
+    cover: cover4,
+    customer_review_rank: 4,
+    category: { name: '인문학' },
+    publisher: '사이언스북스',
+    publishedDate: '2006-12-20'
+  },
+  {
+    id: 5,
+    title: '해커와 화가',
+    author: '폴 그레이엄',
+    cover: cover5,
+    customer_review_rank: 5,
+    category: { name: '컴퓨터/모바일' },
+    publisher: '한빛미디어',
+    publishedDate: '2011-06-20'
+  },
+  {
+    id: 6,
+    title: '클린 코드',
+    author: '로버트 C. 마틴',
+    cover: cover6,
+    customer_review_rank: 6,
+    category: { name: '컴퓨터/모바일' },
+    publisher: '인사이트',
+    publishedDate: '2013-12-24'
   }
+]
+
+onMounted(async () => {
+  // 백엔드 없이 목데이터만 사용
+  sortedBooks.value = mockBooks
 })
 </script>
 

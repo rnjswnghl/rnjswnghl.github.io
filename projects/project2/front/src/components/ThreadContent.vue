@@ -46,14 +46,32 @@ watch(localContent, (newVal) => {
 const comments = ref([])
 const newComment = ref('')
 
+// 목데이터 - 댓글
+const mockComments = {
+  1: [
+    { id: 1, content: '저도 이 책 정말 좋아합니다!', author: '책사랑', created_at: new Date(Date.now() - 3600000).toISOString() },
+    { id: 2, content: '편의점이라는 공간이 이렇게 따뜻할 수 있다니...', author: '독서중', created_at: new Date(Date.now() - 7200000).toISOString() }
+  ],
+  2: [
+    { id: 3, content: '꿈 백화점 설정이 정말 독특하네요!', author: '상상력', created_at: new Date(Date.now() - 1800000).toISOString() }
+  ],
+  3: [
+    { id: 4, content: '인생의 다양한 가능성을 보여주는 작품이에요.', author: '독서인', created_at: new Date(Date.now() - 5400000).toISOString() },
+    { id: 5, content: '후회와 선택에 대해 생각해볼 수 있었습니다.', author: '책벌레', created_at: new Date(Date.now() - 9000000).toISOString() }
+  ],
+  4: [
+    { id: 6, content: '우주의 광대함에 대해 생각해볼 수 있었어요.', author: '과학좋아', created_at: new Date(Date.now() - 10800000).toISOString() }
+  ],
+  5: [
+    { id: 7, content: '프로그래머 필독서입니다!', author: '개발자', created_at: new Date(Date.now() - 14400000).toISOString() }
+  ]
+}
+
 // 댓글 목록 불러오기
 async function fetchComments() {
-  try {
-    const res = await api.get(`threads/posts/${props.thread.id}/comments/`)
-    comments.value = res.data
-  } catch (error) {
-    alert('댓글 목록을 불러오는데 실패했습니다.')
-  }
+  // 백엔드 없이 목데이터만 사용
+  const threadId = props.thread?.id || 1
+  comments.value = mockComments[threadId] || []
 }
 
 function formatDate(dateString) {
@@ -67,15 +85,21 @@ async function submitComment() {
     alert('댓글 내용을 입력해주세요.')
     return
   }
-  try {
-    await api.post(`threads/posts/${props.thread.id}/comments/`, {
-      content: newComment.value,
-    })
-    newComment.value = ''
-    await fetchComments()
-  } catch (error) {
-    alert('댓글 등록에 실패했습니다.')
+  // 백엔드 없이 목데이터에 추가 (실제로는 저장되지 않음)
+  const threadId = props.thread?.id || 1
+  if (!mockComments[threadId]) {
+    mockComments[threadId] = []
   }
+  const newCommentObj = {
+    id: Date.now(),
+    content: newComment.value,
+    author: '현재 사용자',
+    created_at: new Date().toISOString()
+  }
+  mockComments[threadId].push(newCommentObj)
+  comments.value.push(newCommentObj)
+  newComment.value = ''
+  alert('댓글이 등록되었습니다. (데모 모드: 실제로 저장되지 않습니다)')
 }
 
 // 댓글 삭제
@@ -83,12 +107,13 @@ async function deleteComment(commentId) {
   const confirmed = confirm('댓글을 삭제하시겠습니까?')
   if (!confirmed) return
 
-  try {
-    await api.delete(`threads/posts/${props.thread.id}/comments/${commentId}/`)
-    await fetchComments()
-  } catch (error) {
-    alert('댓글 삭제에 실패했습니다.')
+  // 백엔드 없이 목데이터에서 제거 (실제로는 저장되지 않음)
+  comments.value = comments.value.filter(c => c.id !== commentId)
+  const threadId = props.thread?.id || 1
+  if (mockComments[threadId]) {
+    mockComments[threadId] = mockComments[threadId].filter(c => c.id !== commentId)
   }
+  alert('댓글이 삭제되었습니다. (데모 모드: 실제로 삭제되지 않습니다)')
 }
 
 // 좋아요 상태 업데이트 콜백

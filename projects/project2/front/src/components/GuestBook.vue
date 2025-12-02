@@ -96,42 +96,57 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken')
 
 const getToken = () => {
-    return localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
+    try {
+      return localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
+    } catch (error) {
+      console.warn('Storage 접근 불가 (iframe 제한):', error)
+      return null
+    }
+}
+
+// 목데이터 - 방명록
+const mockGuestbookEntries = {
+  1: [
+    { id: 1, emoji: '😊', author_username: '독서왕', created_at: new Date(Date.now() - 86400000).toISOString() },
+    { id: 2, emoji: '❤️', author_username: '책벌레', created_at: new Date(Date.now() - 172800000).toISOString() },
+    { id: 3, emoji: '👍', author_username: '독서인', created_at: new Date(Date.now() - 259200000).toISOString() }
+  ]
 }
 
 const loadEntries = async () => {
-    try {
-        const res = await fetchGuestbook(props.userId)
-        entries.value = res.data
-    } catch (err) {
-        console.error('방명록 불러오기 실패:', err.response?.data || err.message)
-    }
+    // 백엔드 없이 목데이터만 사용
+    entries.value = mockGuestbookEntries[props.userId] || []
 }
 
 const submitEmoji = async (emoji) => {
-    try {
-        await postGuestbook(props.userId, emoji)
-        await loadEntries()
-    } catch (err) {
-        console.error('이모지 방명록 저장 실패:', err.response?.data || err.message)
-        alert('이모지 방명록 작성에 실패했습니다.')
+    // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+    const { useUserStore } = await import('@/stores/user')
+    const userStore = useUserStore()
+    const username = userStore.userProfile?.username || 'testuser'
+    
+    if (!mockGuestbookEntries[props.userId]) {
+        mockGuestbookEntries[props.userId] = []
     }
+    
+    const newEntry = {
+        id: Date.now(),
+        emoji: emoji,
+        author_username: username,
+        created_at: new Date().toISOString()
+    }
+    
+    mockGuestbookEntries[props.userId].unshift(newEntry)
+    entries.value = [...mockGuestbookEntries[props.userId]]
+    alert('방명록이 작성되었습니다. (데모 모드: 실제로 저장되지 않습니다)')
 }
 
 const deleteEntry = async (entryId) => {
-    try {
-        const token = getToken()
-        await axios.delete(`/api/guestbook/entry/${entryId}/`, {
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Authorization': `Bearer ${token}`,
-            }
-        })
-        await loadEntries()
-    } catch (err) {
-        console.error('방명록 삭제 실패:', err.response?.data || err.message)
-        alert('방명록 삭제에 실패했습니다.')
+    // 백엔드 없이 목데이터만 사용 (실제로는 저장되지 않음)
+    if (mockGuestbookEntries[props.userId]) {
+        mockGuestbookEntries[props.userId] = mockGuestbookEntries[props.userId].filter(e => e.id !== entryId)
+        entries.value = [...mockGuestbookEntries[props.userId]]
     }
+    alert('방명록이 삭제되었습니다. (데모 모드: 실제로 삭제되지 않습니다)')
 }
 
 const formatDate = (datetimeStr) => {
@@ -145,16 +160,10 @@ const getEmojisByCategory = (category) => {
 
 onMounted(async () => {
     await loadEntries()
-    try {
-        const { data } = await axios.get('/api/accounts/current/', {
-            headers: {
-                'Authorization': `Bearer ${getToken()}`
-            }
-        })
-        currentUser.value = data.username
-    } catch (error) {
-        console.error('현재 사용자 정보 불러오기 실패:', error)
-    }
+    // 백엔드 없이 목데이터만 사용
+    const { useUserStore } = await import('@/stores/user')
+    const userStore = useUserStore()
+    currentUser.value = userStore.userProfile?.username || ''
 })
 </script>
 

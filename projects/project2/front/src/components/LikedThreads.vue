@@ -46,16 +46,39 @@ const goToThreadDetail = (threadId) => {
   router.push(`/threads/${threadId}`)
 }
 
-const fetchLikedThreads = async () => {
-  try {
-    console.log('좋아요한 쓰레드 요청 시작')
-    const response = await api.get('threads/liked/')
-    console.log('좋아요한 쓰레드 응답:', response.data)
-    threads.value = response.data
-  } catch (error) {
-    console.error('좋아요한 쓰레드 로딩 실패:', error)
-    console.error('에러 상세:', error.response?.data)
+// 목데이터 - 좋아요한 쓰레드
+const mockLikedThreads = [
+  {
+    id: 1,
+    title: '불편한 편의점을 읽고',
+    content: '정말 따뜻하고 감동적인 이야기였습니다. 편의점이라는 작은 공간에서 펼쳐지는 인간애가 인상적이었어요.',
+    author: '독서왕',
+    created_at: new Date().toISOString(),
+    like_count: 15,
+    comments: [],
+    book_detail: {
+      title: '불편한 편의점',
+      author: '김호연'
+    }
+  },
+  {
+    id: 3,
+    title: '미드나잇 라이브러리 추천합니다',
+    content: '인생의 다양한 가능성을 보여주는 작품입니다. 후회와 선택에 대해 깊이 생각해볼 수 있었어요.',
+    author: '독서인',
+    created_at: new Date(Date.now() - 172800000).toISOString(),
+    like_count: 12,
+    comments: [],
+    book_detail: {
+      title: '미드나잇 라이브러리',
+      author: '매트 헤이그'
+    }
   }
+]
+
+const fetchLikedThreads = async () => {
+  // 백엔드 없이 목데이터만 사용
+  threads.value = mockLikedThreads
 }
 
 onMounted(() => {

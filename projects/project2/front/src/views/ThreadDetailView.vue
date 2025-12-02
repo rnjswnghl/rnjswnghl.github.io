@@ -74,25 +74,15 @@ const fullImageUrl = computed(() => {
 })
 
 async function fetchThread() {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/api/threads/posts/${route.params.id}/`)
-    thread.value = response.data
-
-    // thread.book이 숫자(id)로 들어올 때 책 상세 정보 요청
-    if (typeof thread.value.book === 'number') {
-      try {
-        const bookRes = await axios.get(`${API_BASE_URL}/api/books/book-list/${thread.value.book}/`)
-        thread.value.book = bookRes.data
-      } catch (error) {
-        console.warn('책 상세 정보를 불러오지 못했습니다.', error)
-        thread.value.book = null
-      }
-    }
-
+  // 백엔드 없이 threadStore의 목데이터 사용
+  const { useThreadStore } = await import('@/stores/threadStore')
+  const threadStore = useThreadStore()
+  await threadStore.fetchThreadDetail(route.params.id)
+  thread.value = threadStore.selectedThread
+  
+  if (thread.value) {
     editTitle.value = thread.value.title
     editContent.value = thread.value.content
-  } catch (error) {
-    console.error('게시글을 불러오지 못했습니다.', error)
   }
 }
 
@@ -115,54 +105,21 @@ async function saveEdit({ title, content }) {
     return
   }
 
-  if (!userStore.accessToken) {
-    alert('로그인이 필요합니다.')
-    return
-  }
-
-  // book 필드가 배열, 객체, 숫자일 경우 적절히 처리
-  let bookId = null
-  if (Array.isArray(thread.value.book)) {
-    bookId = thread.value.book[0]
-  } else if (typeof thread.value.book === 'object' && thread.value.book?.id) {
-    bookId = thread.value.book.id
-  } else if (typeof thread.value.book === 'number') {
-    bookId = thread.value.book
-  }
-
-  try {
-    await axios.put(
-      `${API_BASE_URL}/api/threads/posts/${route.params.id}/`,
-      { title, content, book: bookId },
-      { headers: { Authorization: `Bearer ${userStore.accessToken}` } }
-    )
-    alert('게시글이 수정되었습니다.')
+  // 백엔드 없이 목데이터만 업데이트 (실제로는 저장되지 않음)
+  if (thread.value) {
+    thread.value.title = title
+    thread.value.content = content
+    alert('게시글이 수정되었습니다. (데모 모드: 실제로 저장되지 않습니다)')
     isEditing.value = false
-    await fetchThread()
-  } catch (error) {
-    console.error('게시글 수정에 실패했습니다.', error.response?.data || error)
-    alert('수정 중 오류가 발생했습니다.')
   }
 }
 
 async function deleteThread() {
   if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) return
 
-  if (!userStore.accessToken) {
-    alert('로그인이 필요합니다.')
-    return
-  }
-
-  try {
-    await axios.delete(`${API_BASE_URL}/api/threads/posts/${route.params.id}/`, {
-      headers: { Authorization: `Bearer ${userStore.accessToken}` },
-    })
-    alert('게시글이 삭제되었습니다.')
-    router.push('/threads')
-  } catch (error) {
-    console.error('게시글 삭제에 실패했습니다.', error)
-    alert('삭제 중 오류가 발생했습니다.')
-  }
+  // 백엔드 없이 목데이터에서 제거 (실제로는 저장되지 않음)
+  alert('게시글이 삭제되었습니다. (데모 모드: 실제로 삭제되지 않습니다)')
+  router.push('/threads')
 }
 
 onMounted(async () => {

@@ -4,8 +4,10 @@ import router from './router'
 import { createPinia } from 'pinia'
 
 import api from '@/utils/api'  // ★ api 인스턴스 가져오기
+import { safeStorage } from '@/utils/storage'
 
-const accessToken = localStorage.getItem('accessToken')
+// iframe에서 localStorage 접근 시도 (에러 처리)
+const accessToken = safeStorage.getItem('accessToken')
 if (accessToken) {
   api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
 }

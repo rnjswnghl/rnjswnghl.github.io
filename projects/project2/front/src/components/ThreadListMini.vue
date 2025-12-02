@@ -30,23 +30,46 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import axios from 'axios'
+import api from '@/utils/api'
 
 const recentThreads = ref([])
 
-const fetchRecentThreads = async () => {
-  try {
-    const response = await axios.get('http://localhost:8000/api/threads/posts/')
-    recentThreads.value = response.data.slice(0, 3) // 최근 3개만 가져오기
-  } catch (error) {
-    console.error('최근 쓰레드를 불러오는데 실패했습니다:', error)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+
+// 목데이터 (이미지 URL을 빈 문자열로 설정하여 기본 이미지 사용)
+const mockThreads = [
+  {
+    id: 1,
+    title: '불편한 편의점을 읽고',
+    author: '독서왕',
+    ai_image_url: '', // 빈 문자열로 설정하여 기본 이미지 사용
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 2,
+    title: '달러구트 꿈 백화점 후기',
+    author: '책벌레',
+    ai_image_url: '',
+    created_at: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: 3,
+    title: '미드나잇 라이브러리 추천합니다',
+    author: '독서인',
+    ai_image_url: '',
+    created_at: new Date(Date.now() - 172800000).toISOString()
   }
+]
+
+const fetchRecentThreads = async () => {
+  // 백엔드 없이 목데이터만 사용
+  recentThreads.value = mockThreads
 }
 
 const getFullImageUrl = (imageUrl) => {
-  if (!imageUrl) return ''
+  if (!imageUrl) return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="200"%3E%3Crect width="400" height="200" fill="%23f0f0f0"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999"%3E이미지 없음%3C/text%3E%3C/svg%3E'
   if (imageUrl.startsWith('http')) return imageUrl
-  return `http://localhost:8000${imageUrl}`
+  return `${API_BASE_URL}${imageUrl}`
 }
 
 const formatDate = (dateString) => {

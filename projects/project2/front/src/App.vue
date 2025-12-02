@@ -6,7 +6,22 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import NavBar from './components/NavBar.vue'
+
+const router = useRouter()
+
+// 앱 마운트 시 현재 경로 확인 및 메인 페이지로 리다이렉트
+onMounted(() => {
+  router.isReady().then(() => {
+    const currentPath = router.currentRoute.value.path
+    // 경로가 비어있거나 index.html이면 메인 페이지로 이동
+    if (currentPath === '' || currentPath === '/index.html' || currentPath === '/projects/project2/front/dist/') {
+      router.replace('/')
+    }
+  })
+})
 </script>
 
 <style>

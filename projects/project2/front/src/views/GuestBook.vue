@@ -81,7 +81,7 @@ export default {
       try {
         await axios.delete(`http://localhost:8000/api/guestbook/entry/${entryId}/`, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            'Authorization': `Bearer ${safeStorage.getItem('access_token')}`
           }
         })
         await fetchGuestbookEntries()
