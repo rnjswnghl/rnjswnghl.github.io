@@ -1,8 +1,4 @@
-// 메뉴 슬라이드 기능
-function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.style.width = menu.style.width === "250px" ? "0" : "250px";
-}
+// toggleMenu는 toggleMenu.js에서 정의됨
 
 // 상호작용 아이콘 클릭 이벤트
 document.addEventListener("DOMContentLoaded", function() {
@@ -10,15 +6,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const scrapIcon = document.querySelector(".icon.scrap");
     const shareIcon = document.querySelector(".icon.share");
 
-    likeIcon.addEventListener("click", function() {
+    if (likeIcon) likeIcon.addEventListener("click", function() {
         alert("이 레시피를 좋아요 했습니다!");
     });
-
-    scrapIcon.addEventListener("click", function() {
+    if (scrapIcon) scrapIcon.addEventListener("click", function() {
         alert("이 레시피를 스크랩했습니다!");
     });
-
-    shareIcon.addEventListener("click", shareRecipe);
+    if (shareIcon) shareIcon.addEventListener("click", shareRecipe);
 });
 
 // 공유 기능
@@ -73,17 +67,18 @@ function adjustTooltipPosition(tooltip) {
 
 // 사용자가 댓글 입력창에 텍스트를 입력하고 "댓글 추가" 버튼을 클릭했을 때 댓글 목록에 새 댓글을 추가하는 JavaScript 코드
 
-document.querySelector('.comment-submit-button').addEventListener('click', function () {
+const commentSubmitBtn = document.querySelector('.comment-submit-button');
+if (commentSubmitBtn) commentSubmitBtn.addEventListener('click', function () {
     const commentInput = document.querySelector('.comment-input');
+    const commentList = document.querySelector('.comment-list');
+    if (!commentInput || !commentList) return;
+
     const commentText = commentInput.value.trim();
 
     if (commentText) {
-        const commentList = document.querySelector('.comment-list');
         const newComment = document.createElement('li');
         newComment.innerHTML = `<span class="comment-author">익명:</span> <span class="comment-text">${commentText}</span>`;
         commentList.appendChild(newComment);
-
-        // 입력창 초기화
         commentInput.value = '';
     } else {
         alert('댓글을 입력하세요.');

@@ -1,0 +1,8 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "scripts": {
+    "build": "cd projects/project2/front && npm install && npm run build",
+    "start": "npm run build && npx serve ."
+  }
+}

@@ -1,28 +1,4 @@
-@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
-
-/* 기본 스타일 */
-@font-face {
-    font-family: 'basicfont'; /* 사용할 글꼴 이름 */
-    src: url('../fonts/HakgyoansimBareonbatangR.ttf') format('truetype'); /* 파일 경로와 형식 */
-    font-weight: normal; /* 선택: 굵기 */
-    font-style: normal; /* 선택: 스타일 */
-}
-
-/* 외할머니 글씨 (한글) */
-.point-font {
-    font-family: 'basicfont', sans-serif;
-}
-
-/* 본문 글씨 */
-.korean-font {
-    font-family: "Wanted Sans Variable", "Wanted Sans", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-    font-weight: 500;
-}
-
-/* Marcellus (영어) */
-.english-font {
-    font-family: 'Marcellus', serif;
-}
+/* layout.css 상속: @font-face, .point-font, .korean-font */
 
 body {
   background-color: #F2EDEC;
@@ -73,6 +49,42 @@ body {
   width: 1px;
   height: 20px;
   background-color: #cccccc;
+}
+
+/* 제철 레시피 서브탭 */
+.seasonal-subnav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0 20px;
+  flex-wrap: wrap;
+}
+
+.season-tab {
+  padding: 6px 16px;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  border: none;
+  transition: color 0.2s, background 0.2s;
+}
+
+.season-tab:hover {
+  color: #042C57;
+}
+
+.season-tab.active {
+  color: #042C57;
+  font-weight: 600;
+  background: rgba(4, 44, 87, 0.08);
+}
+
+.nav-tab.active {
+  color: #042C57;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /* 콘텐츠 영역 */

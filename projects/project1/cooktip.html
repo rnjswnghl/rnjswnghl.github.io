@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>요리 꿀팁 - 요리의 정원</title>
+    <base href="/projects/project1/">
     <link rel="stylesheet" href="static/css/layout.css">
     <link rel="stylesheet" href="static/css/cooktip.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
-    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
 </head>
 <body>
@@ -24,18 +24,20 @@
             <div class="profile">
                 <span>Guest</span>
             </div>
-            <div class="menu-basictag">
-                <a href="index.html">Home</a>
+            <div id="menu-logged-out" class="menu-basictag">
+                <a href="index.html">홈</a>
                 <a href="recipe_main.html">레시피</a>
                 <a href="cooktip.html">요리 꿀팁</a>
                 <a href="login.html">로그인</a>
                 <a href="signup.html">회원가입</a>
+            </div>
+            <div id="menu-logged-in" class="menu-basictag" style="display:none">
+                <a href="index.html">홈</a>
+                <a href="recipe_main.html">레시피</a>
+                <a href="cooktip.html">요리 꿀팁</a>
                 <a href="recipe_register.html">레시피 작성</a>
                 <a href="mypagemain.html">마이페이지</a>
-            </div>
-            <div class="menu-buttons">
-                <button onclick="window.location.href='login.html'">로그인</button>
-                <button onclick="window.location.href='signup.html'">회원가입</button>
+                <a href="javascript:void(0)" onclick="logout()">로그아웃</a>
             </div>
         </div>
 
@@ -137,6 +139,7 @@
     </footer>
 
     <script src="static/js/toggleMenu.js"></script>
+    <script src="static/js/menu-auth.js"></script>
     <script src="static/js/fonts.js"></script>
     <script src="static/js/cooktip.js"></script>
 </body>

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>레시피 목록 - 요리의 정원</title>
+    <base href="/projects/project1/">
     <link rel="stylesheet" href="static/css/layout.css">
     <link rel="stylesheet" href="static/css/recipe_main.css">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
-    <link rel="preload" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -24,18 +24,20 @@
             <div class="profile">
                 <span>Guest</span>
             </div>
-            <div class="menu-basictag">
-                <a href="index.html">Home</a>
+            <div id="menu-logged-out" class="menu-basictag">
+                <a href="index.html">홈</a>
                 <a href="recipe_main.html">레시피</a>
                 <a href="cooktip.html">요리 꿀팁</a>
                 <a href="login.html">로그인</a>
                 <a href="signup.html">회원가입</a>
+            </div>
+            <div id="menu-logged-in" class="menu-basictag" style="display:none">
+                <a href="index.html">홈</a>
+                <a href="recipe_main.html">레시피</a>
+                <a href="cooktip.html">요리 꿀팁</a>
                 <a href="recipe_register.html">레시피 작성</a>
                 <a href="mypagemain.html">마이페이지</a>
-            </div>
-            <div class="menu-buttons">
-                <button onclick="window.location.href='login.html'">로그인</button>
-                <button onclick="window.location.href='signup.html'">회원가입</button>
+                <a href="javascript:void(0)" onclick="logout()">로그아웃</a>
             </div>
         </div>
 
@@ -43,17 +45,23 @@
             <div class="content">
                 <header>  
                     <div class="navigation">
-                        <a href="recipe_main.html" class="active korean-font">모든 레시피</a>
-                        <a href="#" class="korean-font">화제의 레시피</a>
-                        <a href="#" class="korean-font">제철 레시피</a>
-                        <a href="#" class="korean-font">특색 레시피</a>
+                        <a href="javascript:void(0)" class="nav-tab korean-font active" data-tab="all">모든 레시피</a>
+                        <a href="javascript:void(0)" class="nav-tab korean-font" data-tab="trending">화제의 레시피</a>
+                        <a href="javascript:void(0)" class="nav-tab korean-font" data-tab="seasonal">제철 레시피</a>
+                        <a href="javascript:void(0)" class="nav-tab korean-font" data-tab="specialty">특색 레시피</a>
                         <a href="recipe_register.html" class="korean-font">레시피 등록</a>
                     </div>
                 </header>
 
-                <div class="content">
-                    <h2 class="korean-font">레시피 목록</h2>
+                <!-- 제철 레시피 서브탭 (제철 선택 시에만 표시) -->
+                <div id="seasonal-subnav" class="seasonal-subnav" style="display: none;">
+                    <span class="season-tab active" data-season="spring">봄</span>
+                    <span class="season-tab" data-season="summer">여름</span>
+                    <span class="season-tab" data-season="fall">가을</span>
+                    <span class="season-tab" data-season="winter">겨울</span>
+                </div>
 
+                <div class="content">
                     <div class="search-bar">
                         <input type="text" id="searchInput" placeholder="레시피 검색">
                         <button id="searchBtn" class="search-btn" onclick="searchRecipes()">🔍</button>
@@ -93,24 +101,62 @@
     </footer>
 
     <script src="static/js/toggleMenu.js"></script>
+    <script src="static/js/menu-auth.js"></script>
     <script src="static/js/fonts.js"></script>
     <script>
+        // 이미지 경로: static/images/recipes/[음식명].jpg (직접 추가 필요, 없으면 mascot.jpg 사용)
+        const recipeData = {
+            // 화제의 레시피 (2~3개)
+            trending: [
+                { name: "김치찌개", image: "static/images/recipes/김치찌개.jpg", category: "한식", description: "얼큰하고 시원한 김치찌개" },
+                { name: "떡볶이", image: "static/images/recipes/떡볶이.jpg", category: "한식", description: "매콤달콤 떡볶이" },
+                { name: "파스타", image: "static/images/recipes/파스타.jpg", category: "양식", description: "크리미한 파스타" }
+            ],
+            // 제철 레시피 - 봄
+            spring: [
+                { name: "나물비빔밥", image: "static/images/recipes/나물비빔밥.jpg", category: "한식", description: "봄나물이 가득한 영양 비빔밥" },
+                { name: "미역국", image: "static/images/recipes/미역국.jpg", category: "한식", description: "봄 미역으로 끓인 시원한 국" },
+                { name: "쑥국", image: "static/images/recipes/쑥국.jpg", category: "한식", description: "봄철 쑥의 향이 살아있는 국" }
+            ],
+            // 제철 레시피 - 여름
+            summer: [
+                { name: "냉면", image: "static/images/recipes/냉면.jpg", category: "한식", description: "시원한 여름 보양식" },
+                { name: "오이냉국", image: "static/images/recipes/오이냉국.jpg", category: "한식", description: "오이로 만든 시원한 냉국" },
+                { name: "수박화채", image: "static/images/recipes/수박화채.jpg", category: "한식", description: "여름 대표 디저트" }
+            ],
+            // 제철 레시피 - 가을
+            fall: [
+                { name: "감자전", image: "static/images/recipes/감자전.jpg", category: "한식", description: "가을 감자의 고소한 맛" },
+                { name: "굴국밥", image: "static/images/recipes/굴국밥.jpg", category: "한식", description: "가을 굴이 가득한 국밥" },
+                { name: "배추김치", image: "static/images/recipes/배추김치.jpg", category: "한식", description: "가을 배추로 담근 김치" }
+            ],
+            // 제철 레시피 - 겨울
+            winter: [
+                { name: "김치찌개", image: "static/images/recipes/김치찌개.jpg", category: "한식", description: "얼큰하고 시원한 김치찌개" },
+                { name: "부대찌개", image: "static/images/recipes/부대찌개.jpg", category: "한식", description: "든든한 겨울 찌개" },
+                { name: "닭한마리", image: "static/images/recipes/닭한마리.jpg", category: "한식", description: "따뜻한 겨울 보양식" }
+            ],
+            // 특색 레시피 (2~3개)
+            specialty: [
+                { name: "밀면", image: "static/images/recipes/밀면.jpg", category: "한식", description: "부산 대표 특색 음식" },
+                { name: "전주비빔밥", image: "static/images/recipes/전주비빔밥.jpg", category: "한식", description: "전주 대표 음식" },
+                { name: "순대국밥", image: "static/images/recipes/순대국밥.jpg", category: "한식", description: "한국 대표 국밥" }
+            ]
+        };
+
+        // 모든 레시피 (전체 목록)
         const allRecipes = [
-            { name: "김치찌개", searchCount: 120, image: "static/images/mascot.jpg", category: "한식", description: "얼큰하고 시원한 김치찌개" },
-            { name: "된장찌개", searchCount: 80, image: "static/images/mascot.jpg", category: "한식", description: "구수한 된장찌개" },
-            { name: "비빔밥", searchCount: 120, image: "static/images/mascot.jpg", category: "한식", description: "영양만점 비빔밥" },
-            { name: "불고기", searchCount: 90, image: "static/images/mascot.jpg", category: "한식", description: "달콤한 불고기" },
-            { name: "떡볶이", searchCount: 150, image: "static/images/mascot.jpg", category: "한식", description: "매콤달콤 떡볶이" },
-            { name: "라면", searchCount: 200, image: "static/images/mascot.jpg", category: "간단요리", description: "간단한 라면 요리" },
-            { name: "파스타", searchCount: 95, image: "static/images/mascot.jpg", category: "양식", description: "크리미한 파스타" },
-            { name: "피자", searchCount: 110, image: "static/images/mascot.jpg", category: "양식", description: "치즈가 가득한 피자" },
-            { name: "짜장면", searchCount: 130, image: "static/images/mascot.jpg", category: "중식", description: "달콤한 짜장면" },
-            { name: "초밥", searchCount: 100, image: "static/images/mascot.jpg", category: "일식", description: "신선한 초밥" },
-            { name: "라멘", searchCount: 85, image: "static/images/mascot.jpg", category: "일식", description: "진한 국물의 라멘" },
-            { name: "볶음밥", searchCount: 75, image: "static/images/mascot.jpg", category: "간단요리", description: "간단한 볶음밥" }
-        ];
+            ...recipeData.trending,
+            ...recipeData.spring,
+            ...recipeData.summer,
+            ...recipeData.fall,
+            ...recipeData.winter,
+            ...recipeData.specialty
+        ].filter((r, i, arr) => arr.findIndex(x => x.name === r.name) === i); // 중복 제거
 
         let filteredRecipes = [...allRecipes];
+        let currentTab = 'all';
+        let currentSeason = 'spring';
 
         function displayRecipes(recipesToShow = filteredRecipes) {
             const recipeGrid = document.querySelector('#recipe-grid');
@@ -140,6 +186,7 @@
                 const img = document.createElement('img');
                 img.src = recipe.image || "static/images/mascot.jpg";
                 img.alt = `${recipe.name} 사진`;
+                img.onerror = () => { img.src = "static/images/mascot.jpg"; };
 
                 const name = document.createElement('h3');
                 name.textContent = recipe.name;
@@ -164,13 +211,14 @@
 
         function searchRecipes() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const baseRecipes = getRecipesForCurrentView();
             if (!searchTerm) {
-                filteredRecipes = [...allRecipes];
+                filteredRecipes = [...baseRecipes];
             } else {
-                filteredRecipes = allRecipes.filter(recipe => 
+                filteredRecipes = baseRecipes.filter(recipe => 
                     recipe.name.toLowerCase().includes(searchTerm) ||
-                    recipe.description.toLowerCase().includes(searchTerm) ||
-                    recipe.category.toLowerCase().includes(searchTerm)
+                    (recipe.description && recipe.description.toLowerCase().includes(searchTerm)) ||
+                    (recipe.category && recipe.category.toLowerCase().includes(searchTerm))
                 );
             }
             displayRecipes();
@@ -178,22 +226,60 @@
 
         function filterByTag(tag) {
             if (tag === '전체') {
-                filteredRecipes = [...allRecipes];
+                filteredRecipes = getRecipesForCurrentView();
             } else {
-                filteredRecipes = allRecipes.filter(recipe => recipe.category === tag);
+                filteredRecipes = getRecipesForCurrentView().filter(recipe => recipe.category === tag);
             }
             document.getElementById('searchInput').value = '';
             displayRecipes();
         }
 
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchRecipes();
+        function getRecipesForCurrentView() {
+            if (currentTab === 'all') return [...allRecipes];
+            if (currentTab === 'trending') return [...recipeData.trending];
+            if (currentTab === 'seasonal') return [...recipeData[currentSeason]];
+            if (currentTab === 'specialty') return [...recipeData.specialty];
+            return [...allRecipes];
+        }
+
+        function showTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.nav-tab[data-tab="${tab}"]`)?.classList.add('active');
+
+            const subnav = document.getElementById('seasonal-subnav');
+
+            if (tab === 'seasonal') {
+                subnav.style.display = 'flex';
+                filteredRecipes = [...recipeData[currentSeason]];
+            } else {
+                subnav.style.display = 'none';
+                filteredRecipes = tab === 'all' ? [...allRecipes] : [...recipeData[tab]];
             }
+            displayRecipes();
+        }
+
+        function showSeason(season) {
+            currentSeason = season;
+            document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.season-tab[data-season="${season}"]`)?.classList.add('active');
+            filteredRecipes = [...recipeData[season]];
+            displayRecipes();
+        }
+
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => showTab(tab.dataset.tab));
+        });
+        document.querySelectorAll('.season-tab').forEach(tab => {
+            tab.addEventListener('click', () => showSeason(tab.dataset.season));
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchRecipes();
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            displayRecipes();
+            showTab('all');
         });
     </script>
 </body>
