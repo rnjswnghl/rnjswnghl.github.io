@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './', // 상대 경로로 빌드
+  base: '/projects/project2/front/dist/', // 포트폴리오에서 iframe으로 로드할 때 올바른 경로
   plugins: [
     vue(),
     vueDevTools(),

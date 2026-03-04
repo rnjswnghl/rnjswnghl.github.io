@@ -164,20 +164,15 @@ const modalTitle = document.getElementById('modalTitle');
 const modalLoading = document.querySelector('.modal-loading');
 const modalError = document.querySelector('.modal-error');
 
-// Open modal when clicking on "프로젝트 보기" button or project card
-document.querySelectorAll('.view-project, .project-card').forEach(element => {
-    element.addEventListener('click', (e) => {
-        // Prevent default link behavior
-        if (element.classList.contains('view-project')) {
-            e.preventDefault();
-        }
+// 프로젝트 카드 클릭 시 팝업(모달)으로 프로젝트 데모 표시 (링크 클릭 제외)
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        // 링크(프로젝트 상세보기, GitHub) 클릭 시에는 기본 동작 유지
+        if (e.target.closest('a')) return;
         
-        // Get project path
-        const projectPath = element.getAttribute('data-project-path') || 
-                           element.closest('.project-card')?.getAttribute('data-project-path');
-        
+        const projectPath = card.getAttribute('data-project-path');
         if (projectPath) {
-            openProjectModal(projectPath, element);
+            openProjectModal(projectPath, card);
         }
     });
 });
@@ -227,11 +222,11 @@ function openProjectModal(projectPath, element) {
 
 // Close modal
 function closeProjectModal() {
-    projectModal.classList.remove('active');
+    if (projectModal) projectModal.classList.remove('active');
     document.body.style.overflow = '';
-    projectFrame.src = '';
-    modalLoading.classList.remove('hidden');
-    modalError.style.display = 'none';
+    if (projectFrame) projectFrame.src = '';
+    if (modalLoading) modalLoading.classList.remove('hidden');
+    if (modalError) modalError.style.display = 'none';
 }
 
 if (modalClose) {

@@ -386,6 +386,11 @@ body::before {
     box-shadow: var(--shadow-lg);
 }
 
+.btn-sm {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+}
+
 .scroll-indicator {
     position: absolute;
     bottom: 40px;
