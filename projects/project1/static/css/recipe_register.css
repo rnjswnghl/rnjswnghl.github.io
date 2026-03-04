@@ -48,8 +48,8 @@ body {
   padding-top: 20px;
 }
 
-/* 컨테이너 스타일 */
-.container {
+/* 컨테이너 스타일 (폼 영역만 적용, footer 제외) */
+.wrapper .content .container {
   max-width: 900px;
   margin: 30px auto;
   padding: 20px;
