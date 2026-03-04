@@ -880,6 +880,11 @@ section {
     font-weight: 600;
 }
 
+.project-image--focusmate {
+    background: linear-gradient(135deg, rgba(109, 179, 242, 0.85) 0%, rgba(102, 126, 234, 0.85) 100%),
+                url('projects/project3/public/images/meeting.png') center/cover no-repeat;
+}
+
 .project-content {
     padding: 1.5rem;
 }
@@ -1069,6 +1074,7 @@ section {
     width: 95%;
     max-width: 1400px;
     height: 90vh;
+    height: 90dvh;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -1080,6 +1086,44 @@ section {
     overflow: hidden;
     animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2001;
+}
+
+/* 모달 반응형: 작은 화면에서 여백·간격 조정 */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 98%;
+        height: 92vh;
+        height: 92dvh;
+        border-radius: 16px;
+    }
+    .modal-header {
+        padding: 1rem 1.25rem;
+    }
+    .modal-header h2 {
+        font-size: 1.25rem;
+    }
+    .modal-close {
+        top: 10px;
+        right: 12px;
+        font-size: 2rem;
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        border-radius: 0;
+    }
+    .modal-header {
+        padding: 0.875rem 1rem;
+    }
+    .modal-header h2 {
+        font-size: 1.125rem;
+    }
 }
 
 .modal-close {
