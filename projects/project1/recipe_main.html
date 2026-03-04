@@ -180,13 +180,14 @@
                     recipeCard.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
                 };
                 recipeCard.onclick = () => {
+                    sessionStorage.setItem('project1_recipe_name', recipe.name);
                     window.location.href = 'recipe_detail.html';
                 };
 
                 const img = document.createElement('img');
                 img.src = recipe.image || "static/images/mascot.jpg";
-                img.alt = `${recipe.name} 사진`;
-                img.onerror = () => { img.src = "static/images/mascot.jpg"; };
+                img.alt = recipe.name + ' 사진';
+                img.onerror = function() { this.src = "static/images/mascot.jpg"; };
 
                 const name = document.createElement('h3');
                 name.textContent = recipe.name;
@@ -198,7 +199,7 @@
                 description.style.cssText = 'margin: 5px 0 10px 0; color: #666; font-size: 0.9rem;';
 
                 const category = document.createElement('span');
-                category.textContent = `#${recipe.category}`;
+                category.textContent = '#' + recipe.category;
                 category.style.cssText = 'display: inline-block; padding: 5px 10px; background: #f0f0f0; border-radius: 15px; font-size: 0.85rem; color: #042C57; margin-bottom: 10px;';
 
                 recipeCard.appendChild(img);

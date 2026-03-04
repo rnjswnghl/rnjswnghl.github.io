@@ -70,7 +70,7 @@
                         </p>
                         <p>성별:
                             <label><input type="radio" id="male" name="gender" value="male"> 남자</label>
-                            <label><input type="radio" id="female" name="gender" value="female"> 여자</label>
+                            <!-- <label><input type="radio" id="female" name="gender" value="female"> 여자</label> -->
                         </p>
                         <p>전화번호: <span id="phone-display">010-1234-5678</span>
                             <input type="text" id="phone-input" value="010-1234-5678" style="display: none;">
@@ -89,17 +89,17 @@
                     <div class="recipe-category">
                         <h3>스크랩한 레시피 <span>💾</span></h3>
                         <div class="recipe-thumbnails">
-                            <div class="recipe-thumbnail">김치찌개</div>
-                            <div class="recipe-thumbnail">된장찌개</div>
-                            <div class="recipe-thumbnail">비빔밥</div>
+                            <a href="recipe_detail.html" class="recipe-thumbnail" onclick="sessionStorage.setItem('project1_recipe_name','김치찌개')">김치찌개</a>
+                            <a href="recipe_detail.html" class="recipe-thumbnail" onclick="sessionStorage.setItem('project1_recipe_name','파스타')">파스타</a>
+                            <a href="recipe_detail.html" class="recipe-thumbnail" onclick="sessionStorage.setItem('project1_recipe_name','나물비빔밥')">나물비빔밥</a>
                         </div>
                     </div>
                     <div class="recipe-category">
                         <h3>좋아요한 레시피 <span>💘</span></h3>
                         <div class="recipe-thumbnails">
-                            <div class="recipe-thumbnail">불고기</div>
-                            <div class="recipe-thumbnail">떡볶이</div>
-                            <div class="recipe-thumbnail">라면</div>
+                            <a href="recipe_detail.html" class="recipe-thumbnail" onclick="sessionStorage.setItem('project1_recipe_name','냉면')">냉면</a>
+                            <a href="recipe_detail.html" class="recipe-thumbnail" onclick="sessionStorage.setItem('project1_recipe_name','떡볶이')">떡볶이</a>
+                            <a href="recipe_detail.html" class="recipe-thumbnail" onclick="sessionStorage.setItem('project1_recipe_name','부대찌개')">부대찌개</a>
                         </div>
                     </div>
                 </div>

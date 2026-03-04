@@ -176,6 +176,42 @@ body {
     font-size: 24px;
     cursor: pointer;
     color: #042C57;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.icon.active {
+    filter: brightness(1.2);
+}
+
+/* 토스트 팝업 */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 14px 24px;
+    background: rgba(4, 44, 87, 0.95);
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }
 
 /* ---------------------------댓글 섹션 -----------------------------------------*/

@@ -48,51 +48,33 @@
                     
                     <h1 class="page-title">레시피 상세 페이지</h1>
 
+                    <div class="recipe-image">
+                        <img id="recipe-main-image" src="static/images/recipes/김치찌개.jpg" alt="" onerror="this.src='static/images/mascot.jpg'">
+                    </div>
+
                     <section class="recipe-info">
-                        <h2 class="dish-name">요리 이름: 김치찌개</h2>
+                        <h2 class="dish-name" id="dish-name">요리 이름: 김치찌개</h2>
                         <hr>
-                        <p><strong>요리 카테고리:</strong> 한식</p>
-                        <p><strong>소요 시간:</strong> 30분</p>
-                        <p><strong>난이도:</strong> 쉬움</p>
+                        <p><strong>요리 카테고리:</strong> <span id="recipe-category">한식</span></p>
+                        <p><strong>소요 시간:</strong> <span id="recipe-time">30분</span></p>
+                        <p><strong>난이도:</strong> <span id="recipe-difficulty">쉬움</span></p>
                     </section>
 
                     <section class="ingredients">
                         <h3>재료</h3>
-                        <ul>
-                            <li>
-                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
-                                <span class="ingredient-name">김치 200g</span>
-                            </li>
-                            <li>
-                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
-                                <span class="ingredient-name">돼지고기 100g</span>
-                            </li>
-                            <li>
-                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
-                                <span class="ingredient-name">두부 1/2모</span>
-                            </li>
-                            <li>
-                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
-                                <span class="ingredient-name">대파 1대</span>
-                            </li>
-                            <li>
-                                <input type="checkbox" class="ingredient-checkbox" onclick="toggleTooltip(event, '대체재료: 없음')">
-                                <span class="ingredient-name">물 500ml</span>
-                            </li>
-                        </ul>
+                        <ul id="ingredients-list"></ul>
                     </section>
 
                     <section class="cooking-steps">
                         <h3>조리 방법</h3>
-                        <p>1. 돼지고기를 볶아 기름을 내줍니다.</p>
-                        <p>2. 김치를 넣고 볶아줍니다.</p>
-                        <p>3. 물을 넣고 끓여줍니다.</p>
-                        <p>4. 두부와 대파를 넣고 마무리합니다.</p>
+                        <div id="cooking-steps-content"></div>
                     </section>
 
                     <section class="user-interaction">
                         <div class="icons">
-                            <span class="icon share" onclick="shareRecipe()">🔗</span>
+                            <span class="icon scrap" id="scrapIcon" title="스크랩" data-off="📋" data-on="💾">📋</span>
+                            <span class="icon like" id="likeIcon" title="좋아요" data-off="🤍" data-on="❤️">🤍</span>
+                            <span class="icon share" id="shareIcon" title="공유">🔗</span>
                         </div>
                     </section>
                 </div>
@@ -116,18 +98,12 @@
         </div>
     </footer>
 
+    <div id="toast" class="toast" aria-live="polite"></div>
+
     <script src="static/js/toggleMenu.js"></script>
     <script src="static/js/menu-auth.js"></script>
     <script src="static/js/fonts.js"></script>
     <script src="static/js/recipe_detail.js"></script>
-    <script>
-        function toggleTooltip(event, message) {
-            alert(message);
-        }
-        function shareRecipe() {
-            alert('레시피 공유 기능은 데모 버전에서 사용할 수 없습니다.');
-        }
-    </script>
 </body>
 </html>
 

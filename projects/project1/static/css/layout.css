@@ -1,12 +1,12 @@
-/* layout.css: 사이드 메뉴 스타일 */  
-
-@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+/* layout.css: 사이드 메뉴 스타일 */
+/* Wanted Sans는 각 HTML의 <link>로 로드 (@import 제거로 렌더링 차단 방지) */
 
 @font-face {
-    font-family: 'basicfont'; /* 사용할 글꼴 이름 */
-    src: url('../fonts/HakgyoansimBareonbatangR.ttf') format('truetype'); /* 파일 경로와 형식 */
-    font-weight: normal; /* 선택: 굵기 */
-    font-style: normal; /* 선택: 스타일 */
+    font-family: 'basicfont';
+    src: url('../fonts/HakgyoansimBareonbatangR.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* 텍스트 먼저 표시, 폰트 로드 후 교체 */
 }
 
 /* 포인트 글씨 (한글) */
@@ -42,12 +42,12 @@ body {
     font-family: "Wanted Sans Variable", "Wanted Sans", sans-serif;
 }
 
-/* Background Section */
+/* Background Section - 최적화된 JPG 사용 (2.2MB PNG → 287KB JPG) */
 .background-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-image: url('../images/background_image.png');
+    background-image: url('../images/background_image_optimized.jpg');
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
