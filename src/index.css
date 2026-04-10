@@ -170,6 +170,190 @@
     );
   }
 
+  .project-ticket {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 0px;
+    position: relative;
+    box-shadow:
+      0 26px 80px rgba(26, 58, 82, 0.18),
+      0 10px 26px rgba(26, 58, 82, 0.14);
+    /* keep it clean (less postcard-ish) */
+    background-image: none;
+  }
+
+  .project-ticket__stripe {
+    position: absolute;
+    left: -14px;
+    right: -14px;
+    top: 14px;
+    height: 10px;
+    background: repeating-linear-gradient(
+      135deg,
+      rgba(26, 58, 82, 0.9) 0px,
+      rgba(26, 58, 82, 0.9) 9px,
+      rgba(255, 255, 255, 0.95) 9px,
+      rgba(255, 255, 255, 0.95) 18px
+    );
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .project-ticket__inner {
+    position: relative;
+  }
+
+  .project-ticket__main {
+    background: rgba(255, 255, 255, 0.92);
+    position: relative;
+    overflow: hidden; /* clip notch to semicircle without diameter line */
+  }
+
+  .project-ticket__stub {
+    background: rgba(238, 244, 255, 0.78);
+    position: relative;
+    overflow: hidden; /* clip notch to semicircle without diameter line */
+  }
+
+  /* Notches: page background + same shadow language as ticket (reads as “through” not white sticker) */
+  .project-ticket__main::before,
+  .project-ticket__main::after,
+  .project-ticket__stub::before,
+  .project-ticket__stub::after {
+    content: "";
+    position: absolute;
+    width: 56px;  /* notch size */
+    height: 56px; /* notch size */
+    border-radius: 999px;
+    background: #f5f5dc;
+    border: none;
+    box-shadow:
+      0 18px 55px rgba(26, 58, 82, 0.18),
+      0 8px 18px rgba(26, 58, 82, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* top notch */
+  .project-ticket__main::before {
+    right: -28px;
+    top: -28px;
+  }
+  .project-ticket__stub::before {
+    left: -28px;
+    top: -28px;
+  }
+
+  /* bottom notch */
+  .project-ticket__main::after {
+    right: -28px;
+    bottom: -28px;
+  }
+  .project-ticket__stub::after {
+    left: -28px;
+    bottom: -28px;
+  }
+
+  .project-ticket__barcode-col {
+    background: rgba(255, 255, 255, 0.92);
+    border-right: 2px dashed rgba(26, 58, 82, 0.30);
+    position: relative;
+  }
+
+  .project-ticket__barcode {
+    height: 36px;
+    width: 160px;
+    border: 1px solid rgba(26, 58, 82, 0.28);
+    border-radius: 0px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(26, 58, 82, 0.9) 0px,
+        rgba(26, 58, 82, 0.9) 2px,
+        transparent 2px,
+        transparent 4px,
+        rgba(26, 58, 82, 0.7) 4px,
+        rgba(26, 58, 82, 0.7) 5px,
+        transparent 5px,
+        transparent 8px
+      );
+    opacity: 0.85;
+  }
+
+  /* vertical barcode: narrower + shorter (horizontal stripes inside) */
+  .project-ticket__barcode-vert {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 40px;
+    bottom: 40px;
+    border: 1px solid rgba(26, 58, 82, 0.28);
+    border-radius: 0px;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgba(26, 58, 82, 0.92) 0px,
+        rgba(26, 58, 82, 0.92) 2px,
+        transparent 2px,
+        transparent 4px,
+        rgba(26, 58, 82, 0.72) 4px,
+        rgba(26, 58, 82, 0.72) 5px,
+        transparent 5px,
+        transparent 8px
+      );
+    opacity: 0.85;
+  }
+
+  /* perforation line shortened by notch radius */
+  .project-ticket__perforation {
+    position: absolute;
+    left: 0;
+    top: 36px;   /* (notch radius 28) + small spacing */
+    bottom: 36px;
+    width: 2px;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(26, 58, 82, 0.75) 0px,
+      rgba(26, 58, 82, 0.75) 10px,
+      transparent 10px,
+      transparent 18px
+    );
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .project-ticket__meta {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1023px) {
+    .project-ticket__stub {
+      border-top: 2px dashed rgba(26, 58, 82, 0.35);
+    }
+
+    /* mobile: keep notch centered on the split line */
+    .project-ticket__main::before,
+    .project-ticket__stub::before {
+      left: 50%;
+      right: auto;
+      top: -28px;
+      transform: translateX(-50%);
+    }
+    .project-ticket__main::after,
+    .project-ticket__stub::after {
+      left: 50%;
+      right: auto;
+      bottom: -28px;
+      transform: translateX(-50%);
+    }
+
+    .project-ticket__meta {
+      display: none;
+    }
+  }
+
   .vintage-stamp {
     border: 2px solid;
     transform: rotate(-15deg);
