@@ -1,0 +1,26 @@
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "node:path";
+import basicSsl from "@vitejs/plugin-basic-ssl";
+ 
+export default defineConfig({
+  plugins: [react(), tailwindcss(), basicSsl()],
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "src"),
+    },
+  },
+  server: {
+    // 일부 환경/브라우저에서 localhost를 https로 강제 업그레이드하는 경우가 있어
+    // 개발 서버도 https로 띄워 접근 문제(무한 로딩처럼 보이는 현상)를 예방합니다.
+    https: true,
+    host: true,
+  },
+  build: {
+    // GitHub Pages: 저장소 설정에서 Publishing source를 `main` 브랜치의 `/docs`로 두면 이 폴더가 라이브 사이트가 됩니다.
+    outDir: "docs",
+    emptyOutDir: true,
+  },
+});
+
