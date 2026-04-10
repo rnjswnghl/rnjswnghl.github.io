@@ -5,6 +5,8 @@ import path from "node:path";
 import basicSsl from "@vitejs/plugin-basic-ssl";
  
 export default defineConfig({
+  // GitHub Pages: user site(rnjswnghl.github.io)는 루트지만, 상대 경로면 /docs 배포·미러 경로 모두 안전
+  base: "./",
   plugins: [react(), tailwindcss(), basicSsl()],
   resolve: {
     alias: {
