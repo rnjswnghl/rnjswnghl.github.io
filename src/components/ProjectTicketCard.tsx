@@ -25,8 +25,9 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
 
   return (
     <div className="project-ticket relative overflow-hidden">
-      {/* top stripe */}
+      {/* diagonal stripe band (top + bottom) */}
       <div className="project-ticket__stripe" aria-hidden />
+      <div className="project-ticket__stripe project-ticket__stripe--bottom" aria-hidden />
 
       <div className="project-ticket__inner grid gap-0 lg:grid-cols-[1fr_6fr_3fr]">
         {/* Column 1: barcode */}
@@ -93,16 +94,16 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
           </div>
         </div>
 
-        {/* Column 3: stub (actions) */}
-        <div className="project-ticket__stub min-w-0 p-6 lg:p-8 flex flex-col justify-between gap-6">
+        {/* Column 3: stub (actions) — perforation is absolute; center the card in the column */}
+        <div className="project-ticket__stub min-w-0 p-6 lg:p-8 flex flex-col justify-center">
           <span className="project-ticket__perforation" aria-hidden />
-          <div className="border border-[#1A3A52]/15 bg-white/55 p-5 backdrop-blur-[2px]">
+          <div className="border border-[#1A3A52]/15 bg-white/55 px-5 py-6 backdrop-blur-[2px] flex flex-col gap-5 w-full">
             <div className="flex items-center justify-between">
               <div className="font-mono-custom text-[11px] tracking-[0.28em] text-[#999]">BOARDING PASS</div>
               <Plane size={18} color="#1A3A52" />
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <div className="font-mono-custom text-[11px] tracking-[0.28em] text-[#999]">YEAR</div>
                 <div className="mt-1 font-mono-custom text-sm tracking-widest text-[#1A3A52]">{project.period}</div>
@@ -127,7 +128,7 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3">
+            <div className="grid gap-3">
               <button
                 type="button"
                 onClick={onOpenDemo}
@@ -159,7 +160,7 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
               </button>
             </div>
 
-            <div className="mt-6 flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-4">
               <div className="font-mono-custom text-[11px] tracking-[0.28em] text-[#999]">
                 CHECK-IN <span className="ml-2 text-[#1A3A52] tracking-widest">{project.comingSoon ? "TBD" : "OPEN"}</span>
               </div>

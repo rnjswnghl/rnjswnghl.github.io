@@ -199,6 +199,11 @@
     pointer-events: none;
   }
 
+  .project-ticket__stripe--bottom {
+    top: auto;
+    bottom: 14px;
+  }
+
   .project-ticket__inner {
     position: relative;
   }
