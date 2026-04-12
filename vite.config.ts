@@ -21,7 +21,7 @@ export default defineConfig({
   },
   build: {
     // GitHub Pages: 저장소 설정에서 Publishing source를 `main` 브랜치의 `/docs`로 두면 이 폴더가 라이브 사이트가 됩니다.
-    outDir: "docs",
+    outDir: "dist",
     emptyOutDir: true,
   },
 });

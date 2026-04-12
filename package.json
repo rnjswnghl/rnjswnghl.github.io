@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
+    "dev": "node scripts/use-dev-index.mjs && vite --host",
+    "build": "node scripts/use-dev-index.mjs && vite build && node scripts/deploy-dist-to-root.mjs",
     "preview": "vite preview --host"
   },
   "dependencies": {
