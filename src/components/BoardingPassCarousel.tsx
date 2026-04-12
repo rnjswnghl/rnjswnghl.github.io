@@ -7,7 +7,7 @@ const projects: ProjectTicket[] = [
   {
     id: 1,
     name: "요리의 정원",
-    period: "2024",
+    period: "2024.10.07 ~ 2024.12.24",
     summary:
       "재료 사진 인식 레시피 추천 웹 서비스. YOLOv11로 재료를 인식하고 Gemini API로 레시피를 추천합니다.",
     tech: ["Flask", "Python", "YOLOv11", "Gemini API"],
@@ -15,11 +15,12 @@ const projects: ProjectTicket[] = [
     githubUrl: "https://github.com/ggabaegii/RecipeRecommendation",
     demoUrl: "/projects/project1/index.html",
     logoImageUrl: "/projects/project1/static/images/mascot.jpg",
+    teamName: "ojo",
   },
   {
     id: 2,
     name: "한페이지",
-    period: "2024",
+    period: "2025.05.22 ~ 2025.05.28",
     summary:
       "Django + Vue로 만든 도서 추천 웹 서비스. 맞춤 추천, 커뮤니티, AI 기능(gTTS/이미지 생성)을 제공합니다.",
     tech: ["Django", "Vue.js", "DRF", "AI"],
@@ -30,7 +31,7 @@ const projects: ProjectTicket[] = [
   {
     id: 3,
     name: "FocusMate",
-    period: "2024",
+    period: "2025.07.07 ~ 2025.08.22",
     summary:
       "온라인 스터디 메이트 매칭 + 실시간 화상회의 플랫폼. WebRTC(OpenVidu) 기반 통화/화면공유/화이트보드/뽀모도로 제공.",
     tech: ["Vue 3", "TypeScript", "OpenVidu", "WebRTC"],
@@ -38,6 +39,7 @@ const projects: ProjectTicket[] = [
     demoUrl: "/projects/project3/dist/index.html",
     logoImageUrl: "/projects/project3/src/assets/images/FMlogo.png",
     logoPresentation: "large",
+    teamName: "ChillySource",
   },
 ];
 
