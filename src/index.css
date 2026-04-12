@@ -208,8 +208,13 @@
     position: relative;
   }
 
+  /* 1·2열 동일: 아주 연한 쿨 그레이 (한 톤으로 통일) */
+  .project-ticket__main,
+  .project-ticket__barcode-col {
+    background: #fafbfc;
+  }
+
   .project-ticket__main {
-    background: rgba(255, 255, 255, 0.92);
     position: relative;
     overflow: hidden; /* clip notch to semicircle without diameter line */
   }
@@ -261,7 +266,6 @@
   }
 
   .project-ticket__barcode-col {
-    background: rgba(255, 255, 255, 0.92);
     border-right: 2px dashed rgba(26, 58, 82, 0.30);
     position: relative;
   }

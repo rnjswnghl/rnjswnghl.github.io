@@ -11,6 +11,7 @@ const projects: ProjectTicket[] = [
     summary:
       "재료 사진 인식 레시피 추천 웹 서비스. YOLOv11로 재료를 인식하고 Gemini API로 레시피를 추천합니다.",
     tech: ["Flask", "Python", "YOLOv11", "Gemini API"],
+    mainStackCount: 3,
     githubUrl: "https://github.com/ggabaegii/RecipeRecommendation",
     demoUrl: "/projects/project1/index.html",
     logoImageUrl: "/projects/project1/static/images/mascot.jpg",
@@ -22,6 +23,7 @@ const projects: ProjectTicket[] = [
     summary:
       "Django + Vue로 만든 도서 추천 웹 서비스. 맞춤 추천, 커뮤니티, AI 기능(gTTS/이미지 생성)을 제공합니다.",
     tech: ["Django", "Vue.js", "DRF", "AI"],
+    mainStackCount: 3,
     demoUrl: "/projects/project2/front/dist/index.html",
     logoImageUrl: "/projects/project2/front/src/assets/lib.jpg",
   },
@@ -32,8 +34,10 @@ const projects: ProjectTicket[] = [
     summary:
       "온라인 스터디 메이트 매칭 + 실시간 화상회의 플랫폼. WebRTC(OpenVidu) 기반 통화/화면공유/화이트보드/뽀모도로 제공.",
     tech: ["Vue 3", "TypeScript", "OpenVidu", "WebRTC"],
+    mainStackCount: 3,
     demoUrl: "/projects/project3/dist/index.html",
     logoImageUrl: "/projects/project3/src/assets/images/FMlogo.png",
+    logoPresentation: "large",
   },
 ];
 

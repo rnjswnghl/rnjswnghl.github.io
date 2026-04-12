@@ -6,10 +6,14 @@ export type ProjectTicket = {
   period: string;
   summary: string;
   tech: string[];
+  /** 보딩 패스 스텁용: 태그 전체 개수가 아니라 강조하는 주요 스택 수(+ 그 외 포함) */
+  mainStackCount: number;
   githubUrl?: string;
   demoUrl?: string;
   logoText?: string; // emoji or short text
   logoImageUrl?: string;
+  /** 프레임 크기는 동일, 내부 로고만 확대(에셋 여백 많을 때) */
+  logoPresentation?: "default" | "large";
   comingSoon?: boolean;
 };
 
@@ -22,6 +26,7 @@ type Props = {
 export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }: Props) {
   const demoDisabled = project.comingSoon || !project.demoUrl;
   const githubDisabled = project.comingSoon || !project.githubUrl;
+  const logoLarge = project.logoPresentation === "large";
 
   return (
     <div className="project-ticket relative overflow-hidden">
@@ -37,7 +42,7 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
 
         {/* Column 2: project content */}
         <div className="project-ticket__main relative min-w-0 p-6 lg:p-8">
-          <div className="flex items-start justify-between gap-6">
+          <div className="flex items-center justify-between gap-6 lg:gap-8">
             <div className="min-w-0">
               <div className="flex items-center gap-3">
                 <div className="font-mono-custom text-[11px] tracking-[0.28em] text-[#B8654B]">TRAVEL EVENT</div>
@@ -51,14 +56,20 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
 
             <div className="shrink-0">
               {project.logoImageUrl ? (
-                <img
-                  src={project.logoImageUrl}
-                  alt={`${project.name} logo`}
-                  className="h-14 w-14 border border-[#1A3A52]/30 bg-[#F5F5DC] object-contain p-2"
-                  loading="lazy"
-                />
+                <div className="flex h-[5.25rem] w-[5.25rem] sm:h-24 sm:w-24 items-center justify-center overflow-hidden border border-[#1A3A52]/25 bg-white p-3 shadow-sm">
+                  <img
+                    src={project.logoImageUrl}
+                    alt={`${project.name} logo`}
+                    className={
+                      logoLarge
+                        ? "max-h-full max-w-full object-contain scale-[1.2] origin-center"
+                        : "max-h-full max-w-full object-contain"
+                    }
+                    loading="lazy"
+                  />
+                </div>
               ) : (
-                <div className="h-14 w-14 grid place-items-center border border-[#1A3A52]/30 bg-[#F5F5DC] text-3xl">
+                <div className="grid h-[5.25rem] w-[5.25rem] place-items-center border border-[#1A3A52]/25 bg-white text-5xl shadow-sm sm:h-24 sm:w-24">
                   {project.logoText ?? "✈️"}
                 </div>
               )}
@@ -111,7 +122,7 @@ export default function ProjectTicketCard({ project, onOpenDemo, onOpenGithub }:
               <div>
                 <div className="font-mono-custom text-[11px] tracking-[0.28em] text-[#999]">STACK</div>
                 <div className="mt-1 font-mono-custom text-sm tracking-widest text-[#1A3A52]">
-                  {project.tech.length} TECH
+                  {project.mainStackCount}+ TECH
                 </div>
               </div>
               <div>
