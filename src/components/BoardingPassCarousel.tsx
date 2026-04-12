@@ -137,9 +137,6 @@ export default function BoardingPassCarousel() {
                     aria-label={`Go to project ${i + 1}`}
                   />
                 ))}
-                <span className="ml-3 font-mono-custom text-xs" style={{ color: "#999" }}>
-                  {currentIndex + 1} / {projects.length}
-                </span>
               </div>
             </motion.div>
           </AnimatePresence>
