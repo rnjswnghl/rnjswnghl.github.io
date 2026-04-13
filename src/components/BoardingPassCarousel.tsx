@@ -41,6 +41,20 @@ const projects: ProjectTicket[] = [
     logoPresentation: "large",
     teamName: "ChillySource",
   },
+  {
+    id: 4,
+    name: "On-Wear",
+    period: "2025.08.25 ~ 2025.09.29",
+    summary:
+      "가상 피팅·이미지 검색·맞춤 추천·인기 아이템을 한 화면에서 제공하는 패션 큐레이션 서비스.",
+    tech: ["React", "TypeScript", "Vite", "Zustand", "Emotion", "GSAP"],
+    mainStackCount: 4,
+    githubUrl: "https://github.com/On-Wear-SSAFY-13",
+    demoUrl: "/projects/project4/dist/index.html",
+    logoImageUrl: "/projects/project4/public/img/logo.png",
+    logoPresentation: "large",
+    teamName: "BusanTong",
+  },
 ];
 
 function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () => void }) {

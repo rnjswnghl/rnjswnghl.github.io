@@ -18,6 +18,8 @@ export default defineConfig({
     // 개발 서버도 https로 띄워 접근 문제(무한 로딩처럼 보이는 현상)를 예방합니다.
     https: true,
     host: true,
+    port: 5173,
+    strictPort: true,
   },
   build: {
     // GitHub Pages: 저장소 설정에서 Publishing source를 `main` 브랜치의 `/docs`로 두면 이 폴더가 라이브 사이트가 됩니다.

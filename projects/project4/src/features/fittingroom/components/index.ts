@@ -1,0 +1,8 @@
+export { default as ModelViewer } from '@/features/fittingroom/components/ModelViewer'
+export { default as ActionButtons } from '@/features/fittingroom/components/ActionButtons'
+export { default as TabButtons } from '@/features/fittingroom/components/TabButtons'
+export { default as CategoryTabs } from '@/features/fittingroom/components/CategoryTabs'
+export { default as HybridScrollGrid } from '@/features/fittingroom/components/HybridScrollGrid'
+export { default as UploadModal } from '@/features/fittingroom/components/UploadModal'
+export { default as TutorialTooltip } from '@/features/fittingroom/components/TutorialTooltip'
+export { default as ButtonsContainer } from '@/features/fittingroom/components/ButtonsContainer'

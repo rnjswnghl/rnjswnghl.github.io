@@ -1,0 +1,187 @@
+@use 'sass:math';
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&display=swap');
+
+/* Reset */
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Design tokens */
+:root {
+  /* 색상 */
+  --hue: 223;
+  --bg: hsl(var(--hue), 90%, 50%); /* 진한 파란색 → 밝은 파란색 → 연두색 */
+  --front: #66BF2E; /* 앞면 텍스트 (흰색) */
+  --back: #072bed; /* 뒷면 텍스트 (진한 파란색) */
+  --trans-dur: 0.3s;
+
+  /* 3D/배치 - 헤더 크기로 비례 축소 */
+  --tread-radius: 0.4rem; /* 헤더용으로 축소 (원본: 2rem → 1/5) */
+  --fit: 0.96; /* 전체 스케일(세로 스트레치 여유) */
+  --nudge-x: -0.05em; /* 좌우 보정 */
+  --nudge-y: +0.55em; /* 상하 보정 */
+  --perspective: 160px; /* 헤더용으로 축소 (원본: 800px → 1/5) */
+
+  /* 폰트(세로로 길쭉하게) */
+  --ff:
+    'Archivo', 'Noto Sans KR', system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, sans-serif;
+  --fw: 800; /* 조금 두껍게 */
+  --fs: italic; /* 이탤릭 */
+  --skew: -8deg; /* 추가 기울기 */
+  --stretch-x: 1.05; /* 가로는 살짝만 */
+  --stretch-y: 1.18; /* ✅ 세로를 강조 */
+  --tracking: 0.03em; /* 자간(적절한 간격) */
+
+  font-size: clamp(0.7rem, 0.6rem + 0.2vw, 1.1rem); /* 헤더용 반응형 폰트 */
+}
+
+/* 원형 박스 (클리핑) - 헤더 크기로 축소 */
+.tot {
+  position: relative;
+  width: 4em; /* 헤더용으로 축소 (원본: 20em → 1/5) */
+  height: 4em; /* 헤더용으로 축소 (원본: 20em → 1/5) */
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg);
+  perspective: var(--perspective);
+  margin-top: 10px;
+  &__layer,
+  &__tread {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 50% 50%;
+  }
+
+  &__layer {
+    /* 폰트 적용 */
+    color: transparent;
+    direction: ltr;
+    font-family: var(--ff);
+    font-weight: var(--fw);
+    font-style: var(--fs);
+    letter-spacing: var(--tracking);
+
+    font-size: 1.2em; /* 헤더용으로 축소, 글자 겹침 방지 (원본: 6em → 1/5) */
+    line-height: 1;
+
+    /* front(+treadRadius) 상쇄 → front가 z=0(원 중심) */
+    transform: translate(-50%, -50%) translateZ(calc(-1 * var(--tread-radius)))
+      rotateX(45deg) rotateZ(25deg) scale(var(--fit)) translateX(var(--nudge-x))
+      translateY(var(--nudge-y)) /* ✅ 형태 스트레치 */ scaleX(var(--stretch-x))
+      scaleY(var(--stretch-y));
+
+    transform-style: preserve-3d;
+    z-index: 0;
+  }
+
+  &__tread {
+    animation: letter-tread-back 8s linear infinite; /* 올바른 애니메이션 구문 */
+    backface-visibility: hidden;
+    color: var(--back);
+    overflow: hidden;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    transition: color var(--trans-dur);
+
+
+    &-window {
+      &:before {
+        content: attr(data-text);
+        display: block;
+        white-space: nowrap;
+        /* ✅ 앞/뒤 모두 동일한 형태 변형 유지 */
+        transform: rotateY(180deg) skewX(var(--skew)) scaleX(var(--stretch-x))
+          scaleY(var(--stretch-y));
+      }
+    }
+  }
+
+  /* 마지막 레이어 = 앞면 */
+  &__layer:last-child &__tread {
+    animation-name: letter-tread-front;
+    color: var(--front);
+    z-index: 1;
+
+    &-window {
+      &:before {
+        transform: rotateY(0) skewX(var(--skew)) scaleX(var(--stretch-x))
+          scaleY(var(--stretch-y));
+      }
+    }
+  }
+}
+
+/* ===== Animations (헤더용 비례 축소, 겹침 방지) ===== */
+$treadHalf: 1.6rem; // 헤더용으로 축소 (원본: 8rem → 1/5)
+$treadRadius: 0.4rem; /* 위의 --tread-radius와 동일 값 (원본: 2rem → 1/5) */
+$treadCircle: 2 * math.$pi * $treadRadius;
+$treadLength: $treadHalf * 4 + $treadCircle;
+
+@keyframes letter-tread-back {
+  from {
+    transform: translate(-50%, -50%) translateX(0) rotateY(0)
+      translateZ(-#{$treadRadius});
+  }
+  #{math.div($treadHalf, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(#{$treadHalf}) rotateY(0)
+      translateZ(-#{$treadRadius});
+  }
+  #{math.div($treadHalf + $treadCircle * 0.5, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(#{$treadHalf}) rotateY(-180deg)
+      translateZ(-#{$treadRadius});
+  }
+  #{math.div($treadHalf * 2 + $treadCircle * 0.5, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(0) rotateY(-180deg)
+      translateZ(-#{$treadRadius});
+  }
+  #{math.div($treadHalf * 3 + $treadCircle * 0.5, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(-#{$treadHalf}) rotateY(-180deg)
+      translateZ(-#{$treadRadius});
+  }
+  #{math.div($treadHalf * 3 + $treadCircle, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(-#{$treadHalf}) rotateY(-360deg)
+      translateZ(-#{$treadRadius});
+  }
+  to {
+    transform: translate(-50%, -50%) translateX(0) rotateY(-360deg)
+      translateZ(-#{$treadRadius});
+  }
+}
+
+@keyframes letter-tread-front {
+  from {
+    transform: translate(-50%, -50%) translateX(0) rotateY(0)
+      translateZ(#{$treadRadius});
+  }
+  #{math.div($treadHalf, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(-#{$treadHalf}) rotateY(0)
+      translateZ(#{$treadRadius});
+  }
+  #{math.div($treadHalf + $treadCircle * 0.5, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(-#{$treadHalf}) rotateY(-180deg)
+      translateZ(#{$treadRadius});
+  }
+  #{math.div($treadHalf * 2 + $treadCircle * 0.5, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(0) rotateY(-180deg)
+      translateZ(#{$treadRadius});
+  }
+  #{math.div($treadHalf * 3 + $treadCircle * 0.5, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(#{$treadHalf}) rotateY(-180deg)
+      translateZ(#{$treadRadius});
+  }
+  #{math.div($treadHalf * 3 + $treadCircle, $treadLength) * 100%} {
+    transform: translate(-50%, -50%) translateX(#{$treadHalf}) rotateY(-360deg)
+      translateZ(#{$treadRadius});
+  }
+  to {
+    transform: translate(-50%, -50%) translateX(0) rotateY(-360deg)
+      translateZ(#{$treadRadius});
+  }
+}
