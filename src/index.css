@@ -266,52 +266,60 @@
   }
 
   .project-ticket__barcode-col {
-    border-right: 2px dashed rgba(26, 58, 82, 0.30);
+    border-right: 2px dashed rgba(26, 58, 82, 0.28);
     position: relative;
   }
 
   .project-ticket__barcode {
     height: 36px;
     width: 160px;
-    border: 1px solid rgba(26, 58, 82, 0.28);
+    border: 1px solid rgba(26, 58, 82, 0.26);
     border-radius: 0px;
     background:
       repeating-linear-gradient(
         90deg,
-        rgba(26, 58, 82, 0.9) 0px,
-        rgba(26, 58, 82, 0.9) 2px,
+        rgba(26, 58, 82, 0.62) 0px,
+        rgba(26, 58, 82, 0.62) 2px,
         transparent 2px,
         transparent 4px,
-        rgba(26, 58, 82, 0.7) 4px,
-        rgba(26, 58, 82, 0.7) 5px,
+        rgba(26, 58, 82, 0.52) 4px,
+        rgba(26, 58, 82, 0.52) 5px,
         transparent 5px,
         transparent 8px
       );
-    opacity: 0.85;
+    opacity: 0.92;
   }
 
-  /* vertical barcode: narrower + shorter (horizontal stripes inside) */
+  /* vertical barcode: 세로 영역 짧게 + 가로 막대 사이 틈 크게(1회전 52px) */
   .project-ticket__barcode-vert {
     position: absolute;
     left: 22px;
     right: 22px;
-    top: 40px;
-    bottom: 40px;
-    border: 1px solid rgba(26, 58, 82, 0.28);
+    top: 64px;
+    bottom: 64px;
+    border: 1px solid rgba(26, 58, 82, 0.26);
     border-radius: 0px;
     background:
       repeating-linear-gradient(
         180deg,
-        rgba(26, 58, 82, 0.92) 0px,
-        rgba(26, 58, 82, 0.92) 2px,
+        rgba(26, 58, 82, 0.6) 0,
+        rgba(26, 58, 82, 0.6) 2px,
         transparent 2px,
-        transparent 4px,
-        rgba(26, 58, 82, 0.72) 4px,
-        rgba(26, 58, 82, 0.72) 5px,
-        transparent 5px,
-        transparent 8px
+        transparent 12px,
+        rgba(26, 58, 82, 0.66) 12px,
+        rgba(26, 58, 82, 0.66) 15.5px,
+        transparent 15.5px,
+        transparent 26px,
+        rgba(26, 58, 82, 0.56) 26px,
+        rgba(26, 58, 82, 0.56) 27.5px,
+        transparent 27.5px,
+        transparent 38px,
+        rgba(26, 58, 82, 0.68) 38px,
+        rgba(26, 58, 82, 0.68) 42px,
+        transparent 42px,
+        transparent 52px
       );
-    opacity: 0.85;
+    opacity: 0.94;
   }
 
   /* perforation line shortened by notch radius */
