@@ -1,16 +1,17 @@
 import apiInstance from '@/common/core/apiInstance'
 
 /**
- * 구글 로그인을 시작합니다.
- * 백엔드의 OAuth2 인증 엔드포인트로 리다이렉트합니다.
+ * 포트폴리오/데모 환경: OAuth 없이 즉시 로그인 처리합니다.
+ * (백엔드 도메인 접근 불가/불필요)
  */
 export const startGoogleLogin = () => {
-  const backendUrl =
-    import.meta.env.VITE_API_URL || 'https://j13e202.p.ssafy.io/api'
-  const fullUrl = `${backendUrl}/oauth2/authorization/google`
-
-  // 부드러운 리다이렉트를 위해 replace 사용
-  window.location.replace(fullUrl)
+  void import('@/common/auth/stores/authStore').then(({ useAuthStore }) => {
+    useAuthStore.getState().login('demo-token', 'demo', {
+      memberId: 1,
+      memberEmail: 'demo@onwear.local',
+      memberName: '데모 사용자',
+    })
+  })
 }
 
 /**

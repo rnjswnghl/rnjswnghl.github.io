@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProjectTicketCard, { type ProjectTicket } from "@/components/ProjectTicketCard";
 
 const projects: ProjectTicket[] = [
@@ -50,7 +50,8 @@ const projects: ProjectTicket[] = [
     tech: ["React", "TypeScript", "Vite", "Zustand", "Emotion", "GSAP"],
     mainStackCount: 4,
     githubUrl: "https://github.com/On-Wear-SSAFY-13",
-    demoUrl: "/projects/project4/dist/index.html",
+    // React SPA는 /index.html 경로로 들어가면 라우터가 매칭 실패할 수 있어 base 루트로 연결
+    demoUrl: "/projects/project4/dist/",
     logoImageUrl: "/projects/project4/public/img/logo.png",
     logoPresentation: "large",
     teamName: "BusanTong",
@@ -59,6 +60,14 @@ const projects: ProjectTicket[] = [
 
 function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () => void }) {
   if (!project.demoUrl) return null;
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   return (
     <AnimatePresence>
@@ -73,7 +82,7 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-white rounded-lg w-[88vw] h-[84vh] max-w-[1200px] max-h-[84vh] overflow-hidden shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center p-4 border-b" style={{ borderColor: "#EEE" }}>
@@ -87,7 +96,12 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
               <X size={20} color="#1A3A52" />
             </button>
           </div>
-          <iframe title={`${project.name} demo`} src={project.demoUrl} className="w-full h-[75vh]" />
+          <iframe
+            title={`${project.name} demo`}
+            src={project.demoUrl}
+            className="w-full"
+            style={{ height: "calc(84vh - 64px)" }}
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>

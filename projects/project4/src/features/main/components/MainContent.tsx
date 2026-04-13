@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/common/auth'
 import { useToastStore } from '@/common/stores/toastStore'
 
+const BASE = import.meta.env.BASE_URL
+
 interface Article {
   category: string
   subCategory?: string
@@ -212,19 +214,19 @@ const subArticleStyle = css`
   transition: transform 0.3s ease;
 
   &.featured-card {
-    background: url('/img/kanye1.avif') center/cover;
+    background: url('${BASE}img/kanye1.avif') center/cover;
   }
 
   &.second-card {
-    background: url('/img/girl.png') center/cover;
+    background: url('${BASE}img/girl.png') center/cover;
   }
 
   &.third-card {
-    background: url('/img/izy.avif') center/cover;
+    background: url('${BASE}img/izy.avif') center/cover;
   }
 
   &.fourth-card {
-    background: url('/img/tyler.avif') center/cover;
+    background: url('${BASE}img/tyler.avif') center/cover;
   }
 
   &:hover {
