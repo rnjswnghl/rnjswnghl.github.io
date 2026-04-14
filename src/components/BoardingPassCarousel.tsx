@@ -69,6 +69,20 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
+  // 모달이 열려있는 동안 배경(페이지) 스크롤 잠금
+  useEffect(() => {
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -82,7 +96,7 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-lg w-[88vw] h-[84vh] max-w-[1200px] max-h-[84vh] overflow-hidden shadow-2xl"
+          className="bg-white rounded-lg w-[94vw] h-[92vh] max-w-[1400px] max-h-[92vh] overflow-hidden shadow-2xl overscroll-contain"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center p-4 border-b" style={{ borderColor: "#EEE" }}>
@@ -100,7 +114,7 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
             title={`${project.name} demo`}
             src={project.demoUrl}
             className="w-full"
-            style={{ height: "calc(84vh - 64px)" }}
+            style={{ height: "calc(92vh - 64px)" }}
           />
         </motion.div>
       </motion.div>

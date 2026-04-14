@@ -9,7 +9,7 @@ export const startGoogleLogin = () => {
     useAuthStore.getState().login('demo-token', 'demo', {
       memberId: 1,
       memberEmail: 'demo@onwear.local',
-      memberName: '데모 사용자',
+      memberName: 'user',
     })
   })
 }

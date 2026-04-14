@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import { Heart } from 'lucide-react'
 import ClothesImage from '@/common/clothes_detail/components/ClothesImage'
 import ClothesInfo from '@/common/clothes_detail/components/FittingClothesInfo'
 import {
@@ -58,6 +59,22 @@ export default function ClothesDetailModal({
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [open, onClose])
+
+  // 모달이 열려있는 동안 배경 스크롤(페이지/컨테이너) 잠금
+  useEffect(() => {
+    if (!open) return
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+    }
+  }, [open])
 
   const fetchProductDetail = useCallback(async () => {
     try {
@@ -212,7 +229,11 @@ export default function ClothesDetailModal({
   const displayData = productDetail || data
 
   return createPortal(
-    <div css={backdropStyle} onClick={onClose}>
+    <div
+      css={backdropStyle}
+      onClick={onClose}
+      onWheel={(e) => e.preventDefault()}
+    >
       <div css={containerStyle} onClick={(e) => e.stopPropagation()}>
         <button css={closeButtonStyle} onClick={onClose}>
           ✕
@@ -240,9 +261,12 @@ export default function ClothesDetailModal({
                   }}
                   aria-label="like"
                 >
-                  <span css={likeIconStyle(isLiked)}>
-                    {isLiked ? '❤️' : '♡'}
-                  </span>
+                  <Heart
+                    size={18}
+                    color={isLiked ? '#ff4444' : '#60a5fa'}
+                    fill={isLiked ? '#ff4444' : 'transparent'}
+                    style={{ display: 'block' }}
+                  />
                 </button>
               </div>
             </section>
@@ -289,7 +313,8 @@ const backdropStyle = css`
 const containerStyle = css`
   background: #0f0f10; /* 네온 컨셉 다크 베이스 */
   width: 850px;
-  height: 550px;
+  height: min(550px, 86vh);
+  max-height: 86vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
@@ -300,9 +325,13 @@ const containerStyle = css`
   box-shadow:
     0 10px 28px rgba(0, 0, 0, 0.5),
     0 0 24px rgba(168, 232, 64, 0.15);
+  overflow: hidden;
+  min-height: 0;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    width: min(92vw, 850px);
+    height: min(86vh, 720px);
   }
 `
 
@@ -331,6 +360,7 @@ const leftSectionStyle = css`
   flex-direction: column;
   align-items: stretch;
   min-height: 0;
+  overflow: hidden;
 `
 
 const imageFillStyle = css`
@@ -343,6 +373,10 @@ const rightSectionStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 `
 
 const likeBtnStyle = css`
@@ -368,22 +402,7 @@ const likeBtnStyle = css`
   }
 `
 
-const likeIconStyle = (liked: boolean) => css`
-  font-size: 16px;
-  color: ${liked
-    ? '#ff4444'
-    : '#60a5fa'}; /* liked: 네온 레드, default: 네온 블루 */
-  transition:
-    color 0.2s ease,
-    transform 0.12s ease,
-    filter 0.2s ease;
-  position: relative;
-
-  button:hover & {
-    transform: scale(1.06);
-    filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.5));
-  }
-`
+// likeIconStyle removed (emoji → icon)
 
 const loadingStyle = css`
   display: flex;

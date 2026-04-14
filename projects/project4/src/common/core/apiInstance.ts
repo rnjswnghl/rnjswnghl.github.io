@@ -1,12 +1,16 @@
 import axios from 'axios'
+import { createDemoAxios } from '@/common/core/createDemoAxios'
 
-const apiInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+const apiInstance =
+  import.meta.env.VITE_API_URL?.trim()
+    ? axios.create({
+        baseURL: import.meta.env.VITE_API_URL,
+        timeout: 5000,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    : createDemoAxios('main')
 
 // 요청 인터셉터
 apiInstance.interceptors.request.use(

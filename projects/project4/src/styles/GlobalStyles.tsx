@@ -68,12 +68,20 @@ const GlobalStyles = () => (
         box-sizing: border-box;
       }
 
+      html,
+      body,
+      #root {
+        height: 100%;
+      }
+
       body {
         font-family: 'NanumSquare', sans-serif;
         background: #ffffff;
         color: #333;
         line-height: 1.5;
         overflow-x: hidden;
+        /* 프로젝트4는 화면 내부(각 페이지 컨테이너)에서 스크롤을 관리한다 */
+        overflow-y: hidden;
       }
 
       [lang='en'] {

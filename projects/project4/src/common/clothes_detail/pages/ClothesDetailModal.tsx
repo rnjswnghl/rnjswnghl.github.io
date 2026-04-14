@@ -64,6 +64,22 @@ export default function ClothesDetailModal({
     }
   }, [open, onClose])
 
+  // 모달이 열려있는 동안 배경 스크롤(페이지/컨테이너) 잠금
+  useEffect(() => {
+    if (!open) return
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+    }
+  }, [open])
+
   const fetchProductDetail = useCallback(async () => {
     try {
       setIsDetailLoading(true)
@@ -334,7 +350,11 @@ export default function ClothesDetailModal({
   const displayData = productDetail || data
 
   return createPortal(
-    <div css={backdropStyle} onClick={onClose}>
+    <div
+      css={backdropStyle}
+      onClick={onClose}
+      onWheel={(e) => e.preventDefault()}
+    >
       <div css={containerStyle} onClick={(e) => e.stopPropagation()}>
         <button css={closeButtonStyle} onClick={onClose}>
           ✕
@@ -401,7 +421,10 @@ const backdropStyle = css`
 const containerStyle = css`
   background: #0f0f10; /* 네온 컨셉 다크 베이스 */
   width: 850px;
-  height: 550px;
+  /* 고정 높이 모달은 뷰포트가 작을 때 내부 스크롤이 막히기 쉬워서
+     height + max-height 조합으로 안전하게 처리 */
+  height: min(550px, 86vh);
+  max-height: 86vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
@@ -412,9 +435,13 @@ const containerStyle = css`
   box-shadow:
     0 10px 28px rgba(0, 0, 0, 0.5),
     0 0 24px rgba(168, 232, 64, 0.15);
+  overflow: hidden;
+  min-height: 0;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    width: min(92vw, 850px);
+    height: min(86vh, 720px);
   }
 `
 
@@ -443,6 +470,7 @@ const leftSectionStyle = css`
   flex-direction: column;
   align-items: stretch;
   min-height: 0; /* grid 아이템 수축 허용 */
+  overflow: hidden;
 `
 
 const imageFillStyle = css`
@@ -455,6 +483,10 @@ const rightSectionStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 `
 
 const loadingStyle = css`

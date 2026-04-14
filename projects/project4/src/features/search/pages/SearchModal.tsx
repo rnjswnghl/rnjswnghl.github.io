@@ -338,8 +338,10 @@ const ModalContent = styled.div`
   border-radius: 3px;
   width: 95%;
   max-width: 700px;
-  max-height: 80vh;
+  max-height: 86vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   animation: slideDown 0.2s ease-out;
   border: 1px solid #072bed;

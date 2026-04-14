@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Heart } from 'lucide-react'
 
 type ClothesInfoProps = {
   brand: string
@@ -80,7 +81,15 @@ export default function ClothesInfo({
           css={[actionButtonStyle, likeButtonStyle, liked && likedButtonStyle]}
           onClick={onToggleLike}
         >
-          {liked ? '❤️' : '🩶'} {liked ? 'LIKED' : 'LIKE'}
+          <span css={likeButtonInnerStyle}>
+            <Heart
+              size={18}
+              color={liked ? '#ff4444' : '#d1d5db'}
+              fill={liked ? '#ff4444' : 'transparent'}
+              style={{ display: 'block' }}
+            />
+            <span>{liked ? 'LIKED' : 'LIKE'}</span>
+          </span>
         </button>
         <button css={[actionButtonStyle, tryOnButtonStyle]} onClick={onTryOn}>
           TRY ON
@@ -243,6 +252,13 @@ const likedButtonStyle = css`
   background: #111111;
   color: #ff4444;
   border-color: #2a2a2a;
+`
+
+const likeButtonInnerStyle = css`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 `
 
 const tryOnButtonStyle = css`

@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 interface Props {
   visible: boolean
 }
@@ -36,6 +37,20 @@ const emit = defineEmits(['close'])
 function handleClose() {
   emit('close')
 }
+
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible) {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>
@@ -60,6 +75,11 @@ function handleClose() {
   padding: var(--spacing-lg);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.25s ease;
+  max-height: 86vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: contain;
 }
 
 /* 헤더 */
@@ -101,6 +121,10 @@ function handleClose() {
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-lg);
   line-height: 1.6;
+  overflow-y: auto;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 /* 푸터 */

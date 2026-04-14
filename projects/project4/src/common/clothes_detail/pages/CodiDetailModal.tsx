@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { createPortal } from 'react-dom'
 import { useState, useEffect } from 'react'
+import { Heart } from 'lucide-react'
 import CodiImages from '@/common/clothes_detail/components/CodiImages'
 import CodiDetail from '@/common/clothes_detail/components/CodiInfo'
 import { useAuthStore } from '@/common/auth'
@@ -72,6 +73,22 @@ export default function CodiDetailModal({
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [open, onClose])
+
+  // 모달이 열려있는 동안 배경 스크롤(페이지/컨테이너) 잠금
+  useEffect(() => {
+    if (!open) return
+
+    const prevBodyOverflow = document.body.style.overflow
+    const prevHtmlOverflow = document.documentElement.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow
+      document.documentElement.style.overflow = prevHtmlOverflow
+    }
+  }, [open])
 
   // 로그인 체크 공통 함수
   const checkLoginAndExecute = (callback: () => void) => {
@@ -174,7 +191,11 @@ export default function CodiDetailModal({
   }
 
   return createPortal(
-    <div css={backdropStyle} onClick={onClose}>
+    <div
+      css={backdropStyle}
+      onClick={onClose}
+      onWheel={(e) => e.preventDefault()}
+    >
       <div css={containerStyle} onClick={(e) => e.stopPropagation()}>
         <button css={closeButtonStyle} onClick={onClose}>
           ✕
@@ -195,13 +216,21 @@ export default function CodiDetailModal({
               }}
               aria-label="like"
             >
-              <span
-                css={likeIconStyle(
-                  viewMode === 'upper' ? upperLiked : lowerLiked,
-                )}
-              >
-                {(viewMode === 'upper' ? upperLiked : lowerLiked) ? '❤️' : '♡'}
-              </span>
+              <Heart
+                size={18}
+                css={likeIconStyle(viewMode === 'upper' ? upperLiked : lowerLiked)}
+                color={
+                  (viewMode === 'upper' ? upperLiked : lowerLiked)
+                    ? '#ff4444'
+                    : '#60a5fa'
+                }
+                fill={
+                  (viewMode === 'upper' ? upperLiked : lowerLiked)
+                    ? '#ff4444'
+                    : 'transparent'
+                }
+                style={{ display: 'block' }}
+              />
             </button>
           </div>
           {/* Upper/Lower 토글은 2열(CodiInfo) 탭으로 이동 */}
@@ -248,7 +277,8 @@ const backdropStyle = css`
 const containerStyle = css`
   background: #0f0f10;
   width: 850px;
-  height: 550px;
+  height: min(550px, 86vh);
+  max-height: 86vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
@@ -259,9 +289,13 @@ const containerStyle = css`
   box-shadow:
     0 10px 28px rgba(0, 0, 0, 0.5),
     0 0 24px rgba(168, 232, 64, 0.15);
+  overflow: hidden;
+  min-height: 0;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    width: min(92vw, 850px);
+    height: min(86vh, 720px);
   }
 `
 
@@ -290,6 +324,7 @@ const leftSectionStyle = css`
   flex-direction: column;
   align-items: stretch;
   min-height: 0;
+  overflow: hidden;
 `
 
 const imageFillStyle = css`
@@ -303,6 +338,10 @@ const rightSectionStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 `
 
 const likeBtnStyle = css`
@@ -329,10 +368,11 @@ const likeBtnStyle = css`
 `
 
 const likeIconStyle = (liked: boolean) => css`
-  font-size: 16px;
-  color: ${liked ? '#ff4444' : '#60a5fa'};
+  stroke: ${liked ? '#ff4444' : '#60a5fa'};
+  fill: ${liked ? '#ff4444' : 'transparent'};
   transition:
-    color 0.2s ease,
+    stroke 0.2s ease,
+    fill 0.2s ease,
     transform 0.12s ease,
     filter 0.2s ease;
   position: relative;

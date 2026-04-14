@@ -116,6 +116,21 @@ const editFolderName = ref('')
 const currentFolder = ref(null)
 const showEditFolderModal = ref(false)
 
+// 모달이 열려있는 동안 배경 스크롤 잠금 (중첩 모달 포함)
+watch(
+  () => props.show || showEditFolderModal.value,
+  (visible) => {
+    if (visible) {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
+  },
+  { immediate: true },
+)
+
 const fetchFolders = async () => {
   try {
     const { data } = await axios.get('/api/books/folders/', {

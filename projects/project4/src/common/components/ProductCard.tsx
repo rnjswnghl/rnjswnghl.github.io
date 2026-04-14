@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { memo } from 'react'
 import { css } from '@emotion/react'
+import { Heart } from 'lucide-react'
 
 export type Product = {
   productId: string
@@ -57,9 +58,14 @@ function ProductCard({ product, onToggleLike, onClick }: ProductCardProps) {
           css={likeBtnStyle}
           aria-label="like"
         >
-          <span css={likeIconStyle(product.liked)} aria-label="like">
-            {product.liked ? '❤️' : '♡'}
-          </span>
+          <Heart
+            aria-label="like"
+            size={16}
+            css={likeIconStyle(product.liked)}
+            color={product.liked ? '#fa5252' : '#adb5bd'}
+            fill={product.liked ? '#fa5252' : 'transparent'}
+            style={{ display: 'block' }}
+          />
         </button>
       </div>
 
@@ -155,14 +161,15 @@ const likeBtnStyle = css`
 `
 
 const likeIconStyle = (liked: boolean) => css`
-  font-size: 14px;
-  color: ${liked ? '#fa5252' : '#adb5bd'};
+  stroke: ${liked ? '#fa5252' : '#adb5bd'};
+  fill: ${liked ? '#fa5252' : 'transparent'};
   transition: all 0.3s ease-in-out;
   position: relative;
   z-index: 1;
 
   button:hover & {
-    color: white;
+    stroke: white;
+    fill: ${liked ? 'white' : 'transparent'};
     transform: scale(1.2);
   }
 `

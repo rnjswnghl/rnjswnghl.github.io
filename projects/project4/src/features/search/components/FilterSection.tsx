@@ -311,8 +311,10 @@ const Panel = styled.div`
 const PanelScroll = styled.div`
   height: 100%;
   max-height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 `
 
 // Grid/Cell removed for 1-column layout

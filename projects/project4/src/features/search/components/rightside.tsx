@@ -73,9 +73,34 @@ const SidebarContent = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
-  overflow: hidden;
+  /* 필터 패널이 확장될 때 잘리지 않도록 사이드바 자체 스크롤을 허용 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
   box-sizing: border-box;
   overscroll-behavior: contain;
+
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.35);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.55);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
 `
 
 const SidebarTitle = styled.div`
@@ -120,12 +145,11 @@ const SidebarDescription = styled.p`
 `
 
 const SidebarDecor = styled.div`
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
+  /* 필터 콘텐츠의 "끝"에 붙어서 같이 내려가/올라가야 하므로 문서 흐름에 둔다 */
   display: flex;
   align-items: center;
   gap: 16px;
+  margin-top: 20px;
 `
 
 const SidebarCircle = styled.span`

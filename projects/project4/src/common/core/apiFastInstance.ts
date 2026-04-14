@@ -1,10 +1,14 @@
 import axios from 'axios'
+import { createDemoAxios } from '@/common/core/createDemoAxios'
 
-const fastApi = axios.create({
-  baseURL: import.meta.env.VITE_FAST_API_URL,
-  timeout: 50000,
-  headers: { 'Content-Type': 'application/json' },
-})
+const fastApi =
+  import.meta.env.VITE_FAST_API_URL?.trim()
+    ? axios.create({
+        baseURL: import.meta.env.VITE_FAST_API_URL,
+        timeout: 50000,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    : createDemoAxios('fast')
 
 fastApi.interceptors.request.use(
   (config) => {
