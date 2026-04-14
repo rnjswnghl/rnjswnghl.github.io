@@ -56,6 +56,21 @@ const projects: ProjectTicket[] = [
     logoPresentation: "large",
     teamName: "BusanTong",
   },
+  {
+    id: 5,
+    name: "Daltoori",
+    period: "2025.10.10 ~ 2025.11.20",
+    summary:
+      "AI·알고리즘 기반 음성 분석으로 발음/억양 교정을 돕는 모바일 앱. 표준 발음 측정, 피치 시각화, AI 피드백, 참조 음성(TTS) 생성, 학습 이력 관리를 제공합니다.",
+    tech: ["React Native", "Expo Router", "TypeScript", "FastAPI", "Spring Boot", "MySQL"],
+    mainStackCount: 4,
+    githubUrl: "https://github.com/DALTOORI-SSAFY-13/e101",
+    // Expo Web export 결과를 정적 데모로 연결
+    demoUrl: "/projects/project5/dist-web/",
+    demoPresentation: "phone",
+    logoImageUrl: "/projects/project5/assets/images/Daltoori%20logo.png",
+    teamName: "DORAEMONG",
+  },
 ];
 
 function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () => void }) {
@@ -96,7 +111,11 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-lg w-[94vw] h-[92vh] max-w-[1400px] max-h-[92vh] overflow-hidden shadow-2xl overscroll-contain"
+          className={
+            project.demoPresentation === "phone"
+              ? "bg-white rounded-[28px] w-[392px] max-w-[92vw] h-[780px] max-h-[92vh] overflow-hidden shadow-2xl overscroll-contain border border-black/10"
+              : "bg-white rounded-lg w-[94vw] h-[92vh] max-w-[1400px] max-h-[92vh] overflow-hidden shadow-2xl overscroll-contain"
+          }
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center p-4 border-b" style={{ borderColor: "#EEE" }}>
@@ -114,7 +133,12 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
             title={`${project.name} demo`}
             src={project.demoUrl}
             className="w-full"
-            style={{ height: "calc(92vh - 64px)" }}
+            style={{
+              height:
+                project.demoPresentation === "phone"
+                  ? "calc(min(92vh, 780px) - 64px)"
+                  : "calc(92vh - 64px)",
+            }}
           />
         </motion.div>
       </motion.div>

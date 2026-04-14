@@ -12,6 +12,8 @@ export type ProjectTicket = {
   demoUrl?: string;
   logoText?: string; // emoji or short text
   logoImageUrl?: string;
+  /** 데모 팝업 프레젠테이션(웹/앱) */
+  demoPresentation?: "default" | "phone";
   /** 프레임 크기는 동일, 내부 로고만 확대(에셋 여백 많을 때) */
   logoPresentation?: "default" | "large";
   /** SERIAL에만 사용, 없으면 `pjt-번호-년도`까지만 */
