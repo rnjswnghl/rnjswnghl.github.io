@@ -1,4 +1,5 @@
 import { Platform } from 'react-native'
+import { demoSession } from '../demo/demoFeedback'
 
 const fromEnv = process.env.EXPO_PUBLIC_API_BASE_URL?.replace(/\/+$/, '')
 const DEMO =
@@ -6,7 +7,7 @@ const DEMO =
   !process.env.EXPO_PUBLIC_FASTAPI_BASE_URL
 
 // 환경 변수에서만 API Base URL 가져오기 (하드코딩 완전 제거)
-if (!fromEnv) {
+if (!fromEnv && !DEMO) {
   console.error('❌ EXPO_PUBLIC_API_BASE_URL 환경 변수가 설정되지 않았습니다!');
   console.error('📝 .env 파일에 EXPO_PUBLIC_API_BASE_URL을 설정하세요.');
 }
@@ -143,6 +144,15 @@ export async function apiJson<T = unknown>(path: string, init?: RequestInit) {
     const url = new URL(`http://demo${path.startsWith('/') ? '' : '/'}${path}`)
     const pathname = url.pathname
 
+    if (pathname === '/api/user') {
+      return {
+        ok: true,
+        status: 200,
+        data: ({ id: 1, userId: 'demo', nickname: 'Demo User' } as any) as T,
+        raw: null as any,
+      }
+    }
+
     if (pathname === '/api/category') {
       return { ok: true, status: 200, data: demoCategories as any as T, raw: null as any }
     }
@@ -158,6 +168,52 @@ export async function apiJson<T = unknown>(path: string, init?: RequestInit) {
     }
 
     if (pathname.startsWith('/fastapi/evaluation/')) {
+      if (pathname === '/fastapi/evaluation/history') {
+        return {
+          ok: true,
+          status: 200,
+          data: ({
+            status: 'success',
+            user_id: 'demo',
+            data: [demoSession],
+            total: 1,
+            returned: 1,
+            limit: 50,
+            offset: 0,
+          } as any) as T,
+          raw: null as any,
+        }
+      }
+
+      if (pathname === '/fastapi/evaluation/feedback') {
+        return {
+          ok: true,
+          status: 200,
+          data: ({
+            status: 'success',
+            user_id: 'demo',
+            session_id: demoSession.session_id,
+            comprehensive_feedback: demoSession.comprehensive_feedback,
+            overall_score: demoSession.overall_score,
+            overall: demoSession.overall,
+            detailed: demoSession.detailed.map((d) => ({
+              recording_num: d.recording_num,
+              script: d.script,
+              scores: d.scores,
+              detailed_feedback: d.detailed_feedback,
+              reference_audio: { url: null, download_url: null },
+              user_recording: { url: null, download_url: null },
+              analysis: d.analysis,
+            })),
+            suggestions: demoSession.suggestions,
+            strengths: demoSession.strengths,
+            improvement_areas: demoSession.improvement_areas,
+            generated_at: demoSession.generated_at,
+          } as any) as T,
+          raw: null as any,
+        }
+      }
+
       return { ok: true, status: 200, data: ({ status: 'demo' } as any) as T, raw: null as any }
     }
 

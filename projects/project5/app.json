@@ -57,7 +57,8 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "baseUrl": "/projects/project5/dist-web"
     },
     "extra": {
       "router": {},

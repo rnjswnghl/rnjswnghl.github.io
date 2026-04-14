@@ -624,6 +624,9 @@ const styles = StyleSheet.create({
     color: '#475569',
     lineHeight: 26,
     letterSpacing: -0.15,
+    flexShrink: 1,
+    flexWrap: 'wrap',
+    width: '100%',
   },
   valueTextNested: {
     marginLeft: 8,
@@ -659,6 +662,9 @@ const styles = StyleSheet.create({
     color: '#475569',
     lineHeight: 26,
     letterSpacing: -0.15,
+    flexShrink: 1,
+    flexWrap: 'wrap',
+    width: '100%',
   },
   customContent: {
     gap: 16,
@@ -670,6 +676,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     borderLeftWidth: 4,
+    alignSelf: 'stretch',
   },
   chipContainer: {
     flexDirection: 'row',
@@ -684,10 +691,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 999,
+    maxWidth: '100%',
   },
   chipText: {
     fontSize: 14,
     fontWeight: '600',
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
   plainSection: {
     

@@ -11,16 +11,16 @@ export default function MicButton({ onPress }: Props) {
   const pulse = useMemo(() => new Animated.Value(0), []);
 
   const handleIn = () => {
-    Animated.timing(scale, { toValue: 0.96, duration: 120, useNativeDriver: true, easing: Easing.out(Easing.quad) }).start();
+    Animated.timing(scale, { toValue: 0.96, duration: 120, useNativeDriver: false, easing: Easing.out(Easing.quad) }).start();
   };
   const handleOut = () => {
-    Animated.timing(scale, { toValue: 1, duration: 140, useNativeDriver: true, easing: Easing.out(Easing.quad) }).start();
+    Animated.timing(scale, { toValue: 1, duration: 140, useNativeDriver: false, easing: Easing.out(Easing.quad) }).start();
   };
 
   Animated.loop(
     Animated.sequence([
-      Animated.timing(pulse, { toValue: 1, duration: 1400, useNativeDriver: true, easing: Easing.out(Easing.quad) }),
-      Animated.timing(pulse, { toValue: 0, duration: 1400, useNativeDriver: true, easing: Easing.in(Easing.quad) }),
+      Animated.timing(pulse, { toValue: 1, duration: 1400, useNativeDriver: false, easing: Easing.out(Easing.quad) }),
+      Animated.timing(pulse, { toValue: 0, duration: 1400, useNativeDriver: false, easing: Easing.in(Easing.quad) }),
     ])
   ).start();
 

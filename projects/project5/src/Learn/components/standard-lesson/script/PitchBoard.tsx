@@ -173,13 +173,13 @@ export default function PitchBoard({ syllables, basePitches = [], userPitches = 
         toValue: 0,
         duration: 360,
         easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
       current += 1;
       setPage(current);
     };
     slideX.setValue(size.w);
-    Animated.timing(slideX, { toValue: 0, duration: 360, easing: Easing.out(Easing.quad), useNativeDriver: true }).start();
+    Animated.timing(slideX, { toValue: 0, duration: 360, easing: Easing.out(Easing.quad), useNativeDriver: false }).start();
     const id = setInterval(advance, 3500);
     return () => clearInterval(id);
   }, [size.w, count]);

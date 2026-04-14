@@ -22,6 +22,10 @@ import { normalizePitch } from '../utils/realtimePitchExtractor';
 import { fastapiGenerateReference, fastapiGetReferenceAudio, pickDownloadUrl, mapCategoryKeyToFastApiId, pickVisualizationUrl, fastapiEvaluate, fastapiInstantFeedback, EvaluationResponse } from '../../config/api';
 import { invalidateEvaluationHistoryCache } from '../../MyPage/AIFeedbackScreen';
 
+const DEMO =
+  !process.env.EXPO_PUBLIC_API_BASE_URL &&
+  !process.env.EXPO_PUBLIC_FASTAPI_BASE_URL
+
 type ScriptItem = {
   id: number;
   text: string;
@@ -62,6 +66,8 @@ export default function StandardLesson() {
   const recorderState = useAudioRecorderState(recorder);
   const player = useAudioPlayer(null);
   const playerStatus = useAudioPlayerStatus(player);
+
+  const [demoIsRecording, setDemoIsRecording] = useState(false);
 
   const [lastRecordingUri, setLastRecordingUri] = useState<string | null>(null);
   const [analysisMsg, setAnalysisMsg] = useState<string | null>(null);
@@ -144,6 +150,7 @@ export default function StandardLesson() {
   useEffect(() => {
     const checkAndStop = async () => {
       try {
+        if (DEMO) return;
         const status = recorder.getStatus();
         if (status.isRecording) {
           await recorder.stop();
@@ -274,6 +281,12 @@ export default function StandardLesson() {
 
     (async () => {
       try {
+        if (DEMO) {
+          // 데모에서는 Firebase Storage(참조 음성/시각화) 없이도 흐름만 보여준다.
+          setReferenceAudioUrl(null);
+          setScriptVisualizationData(null);
+          return;
+        }
         const audioUrl = await getReferenceAudioUrl(category, currentScriptId);
         setReferenceAudioUrl(audioUrl);
 
@@ -373,6 +386,13 @@ export default function StandardLesson() {
 
   async function playReferenceAudio() {
     try {
+      if (DEMO) {
+        setAnalysisMsg('데모 모드: 원문 오디오는 생략하고 연습 흐름만 보여드려요.');
+        setShowRefGenModal(false);
+        setIsReferencePlaying(false);
+        setShowPitch(false);
+        return;
+      }
       setShowRefGenModal(true);
       setIsReferencePlaying(true);
       setShowPitch(false); 
@@ -592,7 +612,7 @@ export default function StandardLesson() {
     mode === 'sentence' && 
     step === 1 && 
     userPitches.length === 0 && 
-    !recorderState.isRecording && 
+    !isRecording && 
     !lastRecordingUri;
 
   const getRecordingCount = (scriptId: number): number => {
@@ -637,8 +657,72 @@ export default function StandardLesson() {
       setIsReferencePlaying(false);
     },
     onUploadComplete: () => {
+      // non-demo: 기존 로직 유지
     },
   });
+
+  const isRecording = DEMO ? demoIsRecording : recorderState.isRecording;
+
+  function makeDemoRecordingResult(seed: number) {
+    const n = Math.max(1, syllables.length);
+    const pitches = Array.from({ length: n }, (_, i) => {
+      const t = i / Math.max(1, n - 1);
+      const base = 0.25 + 0.55 * t;
+      const wob = Math.sin(i * (0.7 + seed * 0.05)) * (0.08 + seed * 0.005);
+      const bump = i > Math.floor(n * 0.55) && i < Math.floor(n * 0.7) ? 0.08 + seed * 0.01 : 0;
+      return Math.max(0.1, Math.min(0.95, base + wob + bump));
+    });
+    const durations = Array.from({ length: n }, (_, i) => {
+      const isLast = i === n - 1;
+      const d = isLast ? 1.6 : 0.9 + (Math.sin(i * 0.9 + seed) * 0.08);
+      return Math.max(0.6, Math.min(2, d));
+    });
+    return { pitches, durations };
+  }
+
+  async function toggleRecordingSafe() {
+    if (!DEMO) {
+      return toggleRecording();
+    }
+    if (isHandlingNext.current) return;
+
+    if (!demoIsRecording) {
+      setError(null);
+      setAnalysisMsg(null);
+      setHasHeardRecording(false);
+      setShowPitch(true);
+      setUserPitches([]);
+      setUserDurations([]);
+      setRecordingStartTime(Date.now());
+      setDemoIsRecording(true);
+      incrementRecordingCount(currentScriptId);
+      return;
+    }
+
+    // “저장” (데모): 오류 없이 성공 처리 + 다음 문장으로 진행
+    setDemoIsRecording(false);
+    setRecordingStartTime(null);
+    const result = makeDemoRecordingResult(step);
+    setUserPitches(result.pitches);
+    setUserDurations(result.durations);
+    setShowPitch(true);
+    setLastRecordingUri(null);
+    setUploadedFileUrls({}); // DEMO에서는 서버 저장/업로드 없음
+    setRecordedScriptIds((prev) => new Set(prev).add(currentScriptId));
+    setAnalysisMsg('저장 완료! 다음 문장으로 이동합니다.');
+
+    // 짧게 “저장 완료” 보여준 뒤 다음으로
+    setTimeout(() => {
+      if (step < total) {
+        setStep((s) => Math.min(total, s + 1));
+        setUploadedFileUrls({});
+        setError(null);
+        return;
+      }
+      // 마지막이면 AI 피드백 화면으로 이동(데모 데이터는 api.ts가 목업 제공)
+      router.push({ pathname: '/learn/feedback', params: { mode } });
+    }, 650);
+  }
 
   const { playLastRecording: _playLastRecording } = useStandardLessonPlayback({
     player,
@@ -665,6 +749,17 @@ export default function StandardLesson() {
     setShowPitch(false);
 
     try {
+      if (DEMO) {
+        if (step < total) {
+          setStep((s) => Math.min(total, s + 1));
+          setUploadedFileUrls({});
+          isHandlingNext.current = false;
+          return;
+        }
+        router.push({ pathname: '/learn/feedback', params: { mode } });
+        isHandlingNext.current = false;
+        return;
+      }
       
       if (userId && sessionId && uploadedFileUrls.recordingUrl && token) {
         
@@ -845,7 +940,7 @@ export default function StandardLesson() {
                 : (userDurations.length > 0 ? userDurations : (scaledDurations && scaledDurations.length === durations.length ? scaledDurations : durations))
             }
             userPitches={
-              recorderState.isRecording 
+              isRecording 
                 ? realtimePitches 
                 : (userPitches.length > 0 ? userPitches : [])
             }
@@ -854,7 +949,7 @@ export default function StandardLesson() {
             }
             currentPitch={currentPitch}
             currentSyllableIndex={currentSyllableIndex}
-            isRecording={recorderState.isRecording}
+            isRecording={isRecording}
             isReferencePlaying={isReferencePlaying}
             playbackCurrentTime={smoothedCurrentTime}
             totalAudioDuration={mediaDurationSec.current}
@@ -864,11 +959,11 @@ export default function StandardLesson() {
         <RecordingControls
           analysisMessage={analysisMsg}
           hasHeardRecording={hasHeardRecording}
-          hasRecording={!!lastRecordingUri && !recorderState.isRecording && !!uploadedFileUrls.recordingUrl}
-          isRecording={recorderState.isRecording}
+          hasRecording={DEMO ? userPitches.length > 0 : (!!lastRecordingUri || !!uploadedFileUrls.recordingUrl)}
+          isRecording={isRecording}
           loadingScripts={loading}
-          onPlayLastRecording={playLastRecording}
-          onToggleRecording={toggleRecording}
+          onPlayLastRecording={DEMO ? (() => setAnalysisMsg('데모에서는 재생 대신 분석 결과(피치/리듬)만 표시합니다.')) : playLastRecording}
+          onToggleRecording={toggleRecordingSafe}
           scriptsLoaded={scripts.length > 0}
         />
 

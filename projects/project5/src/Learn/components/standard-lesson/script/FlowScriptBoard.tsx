@@ -43,7 +43,7 @@ export default function FlowScriptBoard({
           toValue: -LINE_H - GAP,
           duration: 420,
           easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
+          useNativeDriver: false,
         }).start(({ finished }) => {
           if (!finished || cancelled) return;
           setIdx((prev) => {

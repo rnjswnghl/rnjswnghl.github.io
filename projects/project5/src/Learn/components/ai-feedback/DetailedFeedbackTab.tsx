@@ -64,6 +64,58 @@ export default function DetailedFeedbackTab({ recordingNum, item, parsedFeedback
         </View>
       </Card>
 
+      {item.analysis && (
+        <Card className="mt-3" style={{ marginTop: 20 }}>
+          <View style={styles.feedbackBox}>
+            <View style={styles.feedbackHeader}>
+              <View style={styles.iconBadgeSmall}>
+                <MaterialCommunityIcons name="chart-timeline-variant" size={18} color="#FFFFFF" />
+              </View>
+              <Text style={styles.feedbackTitle}>실제 음성 분석 수치(데모)</Text>
+            </View>
+
+            <View style={styles.analysisGrid}>
+              {!!item.analysis.f0 && (
+                <View style={styles.metricBlock}>
+                  <Text style={styles.metricTitle}>F0(기본주파수)</Text>
+                  <Text style={styles.metricText}>평균 {item.analysis.f0.mean?.toFixed?.(1) ?? item.analysis.f0.mean} Hz</Text>
+                  <Text style={styles.metricText}>표준편차 {item.analysis.f0.std?.toFixed?.(1) ?? item.analysis.f0.std} Hz</Text>
+                  <Text style={styles.metricText}>최소 {item.analysis.f0.min?.toFixed?.(1) ?? item.analysis.f0.min} Hz · 최대 {item.analysis.f0.max?.toFixed?.(1) ?? item.analysis.f0.max} Hz</Text>
+                </View>
+              )}
+
+              {!!item.analysis.energy && (
+                <View style={styles.metricBlock}>
+                  <Text style={styles.metricTitle}>Energy(RMS)</Text>
+                  <Text style={styles.metricText}>평균 {item.analysis.energy.mean?.toFixed?.(2) ?? item.analysis.energy.mean}</Text>
+                  <Text style={styles.metricText}>표준편차 {item.analysis.energy.std?.toFixed?.(2) ?? item.analysis.energy.std}</Text>
+                </View>
+              )}
+
+              {!!item.analysis.alignment && (
+                <View style={styles.metricBlock}>
+                  <Text style={styles.metricTitle}>정렬/유사도</Text>
+                  <Text style={styles.metricText}>DTW 거리 {item.analysis.alignment.dtw_distance?.toFixed?.(2) ?? item.analysis.alignment.dtw_distance}</Text>
+                  <Text style={styles.metricText}>상관계수 {item.analysis.alignment.correlation?.toFixed?.(2) ?? item.analysis.alignment.correlation}</Text>
+                  <Text style={styles.metricText}>F0 상관 {item.analysis.alignment.f0_correlation?.toFixed?.(2) ?? item.analysis.alignment.f0_correlation} · RMSE {item.analysis.alignment.f0_rmse?.toFixed?.(2) ?? item.analysis.alignment.f0_rmse}</Text>
+                </View>
+              )}
+            </View>
+
+            {!!item.analysis.pauses?.length && (
+              <View style={{ marginTop: 14 }}>
+                <Text style={styles.metricTitle}>휴지(쉼)</Text>
+                {item.analysis.pauses.slice(0, 5).map((p, idx) => (
+                  <Text key={idx} style={styles.metricText}>
+                    {idx + 1}. {p.start_time?.toFixed?.(2) ?? p.start_time}s 위치 · 길이 {p.duration?.toFixed?.(2) ?? p.duration}s
+                  </Text>
+                ))}
+              </View>
+            )}
+          </View>
+        </Card>
+      )}
+
       {}
       {structuredFeedback ? (
         <StructuredFeedbackRenderer data={structuredFeedback} />
@@ -426,5 +478,28 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     letterSpacing: -0.2,
     fontWeight: '400',
+  },
+  analysisGrid: {
+    marginTop: 10,
+    gap: 12,
+  },
+  metricBlock: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(15, 23, 42, 0.06)',
+  },
+  metricTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginBottom: 6,
+  },
+  metricText: {
+    fontSize: 13,
+    color: '#334155',
+    lineHeight: 18,
+    marginTop: 2,
   },
 });

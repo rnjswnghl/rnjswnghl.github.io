@@ -183,6 +183,7 @@ export default function AIFeedback() {
             detailed_feedback: item.detailed_feedback || '',
             reference_audio: item.reference_audio,
             user_recording: item.user_recording,
+            analysis: (item as any).analysis,
           };
         }),
       };

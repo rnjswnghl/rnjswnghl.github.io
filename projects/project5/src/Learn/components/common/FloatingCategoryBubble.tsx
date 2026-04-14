@@ -37,8 +37,8 @@ export default function FloatingCategoryBubble({ category, phase = 0, onPress, d
     const duration = 2800 + Math.round((phase % 1) * 1200);
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(translate, { toValue: -amplitude, duration, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
-        Animated.timing(translate, { toValue: amplitude, duration, easing: Easing.inOut(Easing.quad), useNativeDriver: true }),
+        Animated.timing(translate, { toValue: -amplitude, duration, easing: Easing.inOut(Easing.quad), useNativeDriver: false }),
+        Animated.timing(translate, { toValue: amplitude, duration, easing: Easing.inOut(Easing.quad), useNativeDriver: false }),
       ])
     );
     loop.start();
