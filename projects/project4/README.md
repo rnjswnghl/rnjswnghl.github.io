@@ -20,3 +20,8 @@ npm run build
 ```
 
 빌드 결과물은 `dist/`에 생성됩니다.
+
+## API 연동 여부
+
+이 포트폴리오용 `project4`는 **백엔드/DB에 연결하지 않는 프론트 데모**입니다.  
+네트워크 호출은 모두 `src/common/core/createDemoAxios.ts`의 목업 어댑터로 처리됩니다.

@@ -48,6 +48,60 @@ function pageSlice<T>(arr: T[], page: number, size: number) {
   return { slice, total, last, totalPages }
 }
 
+function matchesRankCategory(p: { productName: string; productImageUrl: string }, category: string) {
+  const c = (category ?? '').toLowerCase()
+  const name = (p.productName ?? '').toLowerCase()
+  const img = (p.productImageUrl ?? '').toLowerCase()
+
+  // hotitems/recommend에서 사용하는 category 형식: "upper/hoodie" 또는 "lower/denim" 등
+  const [main, sub] = c.split('/')
+
+  const isUpperItem =
+    /후디|hood|니트|knit|셔츠|shirt|tee|t\\s?shirt|long sleeve|bustier|카라|polo|풀오버|pullover|자켓|jacket|블루종|bomber|아우터|outer|원피스|dress/.test(
+      name,
+    ) ||
+    /hood|knit|shirt|tee|jacket|bomber|outer|dress/.test(img)
+
+  const isLowerItem =
+    /팬츠|pants|denim|jean|shorts|bermuda|치노|chino|cotton|코튼|leggings|레깅스|suit|training|데님/.test(
+      name,
+    ) || /denim|jean|pants|short/.test(img)
+
+  // 1차: upper/lower 큰 분류
+  if (main === 'upper' && !isUpperItem) return false
+  if (main === 'lower' && !isLowerItem) return false
+
+  // 2차: 하위 카테고리(대충이라도 목록이 달라지도록)
+  if (!sub) return true
+
+  switch (sub) {
+    case 'hoodie':
+      return /후디|hood|pullover/.test(name) || /hood/.test(img)
+    case 'knitSweater':
+      return /니트|knit|스웨터|sweater|카라/.test(name) || /knit/.test(img)
+    case 'longSleeve':
+      return /long sleeve|긴소매|롱슬리브|bustier/.test(name)
+    case 'shortSleeve':
+      return /half t|반팔|short sleeve|카라 반팔/.test(name)
+    case 'shirtBlouse':
+      return /셔츠|shirt|blouse/.test(name)
+    case 'short':
+      return /shorts|버뮤다|bermuda|숏/.test(name) || /short/.test(img)
+    case 'denim':
+      return /denim|jean|데님/.test(name) || /denim|jean/.test(img)
+    case 'cotton':
+      return /치노|chino|cotton|코튼/.test(name) || /cotton|chino/.test(img)
+    case 'leggings':
+      return /leggings|레깅스/.test(name)
+    case 'suit':
+      return /suit|정장/.test(name)
+    case 'training':
+      return /training|트레이닝/.test(name)
+    default:
+      return true
+  }
+}
+
 export function createDemoAxios(kind: DemoApiKind) {
   const adapter: AxiosAdapter = async (config) => {
     const method = (config.method ?? 'get').toUpperCase()
@@ -102,9 +156,11 @@ export function createDemoAxios(kind: DemoApiKind) {
       }
 
       if (pathname.endsWith('/products/rank') && method === 'GET') {
+        const category = searchParams.get('category') ?? ''
         const page = Number(searchParams.get('page') ?? '0')
         const size = Number(searchParams.get('size') ?? '10')
-        const { slice, total, last, totalPages } = pageSlice(demoProducts, page, size)
+        const ranked = category ? demoProducts.filter((p) => matchesRankCategory(p, category)) : demoProducts
+        const { slice, total, last, totalPages } = pageSlice(ranked, page, size)
         const content = slice.map((p) => ({
           ...p,
           liked: demoLikedProductIds.has(p.productId),
@@ -144,9 +200,11 @@ export function createDemoAxios(kind: DemoApiKind) {
 
     // ---- main ----
     if (pathname.endsWith('/products/rank') && method === 'GET') {
+      const category = searchParams.get('category') ?? ''
       const page = Number(searchParams.get('page') ?? '0')
       const size = Number(searchParams.get('size') ?? '30')
-      const { slice, total, last, totalPages } = pageSlice(demoProducts, page, size)
+      const ranked = category ? demoProducts.filter((p) => matchesRankCategory(p, category)) : demoProducts
+      const { slice, total, last, totalPages } = pageSlice(ranked, page, size)
       const content = slice.map((p) => ({
         ...p,
         liked: demoLikedProductIds.has(p.productId),
@@ -250,14 +308,17 @@ export function createDemoAxios(kind: DemoApiKind) {
 
     if (pathname.endsWith('/products/search') && method === 'GET') {
       const keyword = (searchParams.get('keyword') ?? '').trim()
+      const kw = keyword.toLowerCase()
       const page = Number(searchParams.get('page') ?? '0')
       const size = Number(searchParams.get('size') ?? '20')
       const filtered = keyword
         ? demoProducts.filter(
             (p) =>
-              p.productName.includes(keyword) ||
-              p.productBrand.includes(keyword) ||
-              p.styleList.some((s) => s.includes(keyword)),
+              p.productName.toLowerCase().includes(kw) ||
+              p.productBrand.toLowerCase().includes(kw) ||
+              p.styleList.some((s) => s.toLowerCase().includes(kw)) ||
+              // 파일명(확장자 포함)으로도 검색 가능하게
+              p.productImageUrl.toLowerCase().includes(kw),
           )
         : []
       const { slice, total, last, totalPages } = pageSlice(filtered, page, size)
