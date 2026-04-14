@@ -237,7 +237,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   }
 
   return (
-    <ModalOverlay onClick={handleOverlayClick} onKeyDown={handleKeyDown}>
+    <ModalOverlay
+      onClick={handleOverlayClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+    >
       <ModalContent>
         <ModalHeader>
           <SearchInput

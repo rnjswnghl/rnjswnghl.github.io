@@ -229,7 +229,16 @@ export const demoMannequins = [
 ]
 
 export const demoSearchHistory = ['니트', '데님', '후디']
-export const demoPopularQueries = ['맨투맨', '코트', '청바지', '스니커즈', '가디건']
+export const demoPopularQueries = [
+  '자켓',
+  '원피스',
+  '데님',
+  '미니멀',
+  '러블리',
+  '시크',
+  '프레피',
+  '스포티',
+]
 
 export const demoImageSearch = {
   upper: demoProducts.slice(0, 9).map((p) => ({

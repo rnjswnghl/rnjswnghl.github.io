@@ -70,7 +70,8 @@ export default function HotItemsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [likedProductIds, setLikedProductIds] = useState<Set<string>>(new Set())
   const [likedProductsLoaded, setLikedProductsLoaded] = useState(false)
-  const [activeSection, setActiveSection] = useState<string>('upper/hoodie')
+  // 기본은 전체 상품(필터 미선택)
+  const [activeSection, setActiveSection] = useState<string | null>(null)
   const [showLoginToast, setShowLoginToast] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [showScrollToTop, setShowScrollToTop] = useState(false)
@@ -131,12 +132,12 @@ export default function HotItemsPage() {
   // 특정 카테고리의 상품 가져오기
   const fetchCategoryProducts = useCallback(
     async (
-      category: CategoryType,
+      category: CategoryType | 'all',
       subCategory: string,
       page: number = 0,
       append: boolean = false,
     ) => {
-      const categoryKey = `${category}/${subCategory}`
+      const categoryKey = category === 'all' ? 'all' : `${category}/${subCategory}`
 
       // 무한 스크롤을 위한 페이지 정규화 (0-9 범위)
       const normalizedPage = ((page % 10) + 10) % 10
@@ -154,11 +155,7 @@ export default function HotItemsPage() {
       }
 
       try {
-        const response = await getPopularProducts(
-          categoryKey,
-          normalizedPage,
-          30,
-        )
+        const response = await getPopularProducts(categoryKey, normalizedPage, 30)
         if (response.success && response.data) {
           const productsWithLikedStatus =
             response.data.popularClothes.content.map((product) => ({
@@ -212,11 +209,8 @@ export default function HotItemsPage() {
     const loadActiveSubCategory = async () => {
       if (!likedProductsLoaded) return
 
-      const [category, subCategory] = activeSection.split('/') as [
-        CategoryType,
-        string,
-      ]
-      const categoryKey = `${category}/${subCategory}`
+      // 전체(필터 미선택)면 all로 로드
+      const categoryKey = activeSection ?? 'all'
 
       // 이미 로드되어 있으면 스킵
       if (categoryProducts[categoryKey]?.products?.length) {
@@ -226,7 +220,15 @@ export default function HotItemsPage() {
 
       setIsLoading(true)
       try {
-        await fetchCategoryProducts(category, subCategory, 0, false)
+        if (categoryKey === 'all') {
+          await fetchCategoryProducts('all', 'all', 0, false)
+        } else {
+          const [category, subCategory] = categoryKey.split('/') as [
+            CategoryType,
+            string,
+          ]
+          await fetchCategoryProducts(category, subCategory, 0, false)
+        }
       } finally {
         setIsLoading(false)
       }
@@ -234,30 +236,19 @@ export default function HotItemsPage() {
 
     loadActiveSubCategory()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeSection, likedProductsLoaded, fetchCategoryProducts])
+  }, [activeSection, likedProductsLoaded, fetchCategoryProducts, categoryProducts])
 
   // Intersection Observer 및 섹션 ref 로직 제거
 
   const handleCategoryChange = (category: CategoryType) => {
     setSelectedCategory(category)
-
-    // 첫 번째 하위 카테고리로 설정
-    const categories =
-      category === 'upper' ? UPPER_CATEGORIES : LOWER_CATEGORIES
-    const firstCategory = categories[0]
-    const sectionId = `${category}/${firstCategory.key}`
-
-    // activeSection을 즉시 설정
-    setActiveSection(sectionId)
-
-    // 단일 섹션 표시: 스크롤 제어 불필요
+    // 탭 변경만 하고, activeSection은 그대로 둔다(전체 보기 유지 가능)
   }
 
   const handleSubCategoryClick = (subCategory: string) => {
+    // 같은 필터를 다시 누르면 해제 → 전체로 복귀
     const sectionId = `${selectedCategory}/${subCategory}`
-
-    // activeSection을 즉시 설정
-    setActiveSection(sectionId)
+    setActiveSection((prev) => (prev === sectionId ? null : sectionId))
 
     // 단일 섹션 표시: 스크롤 제어 불필요
   }
@@ -463,17 +454,44 @@ export default function HotItemsPage() {
             {/* 활성 하위 카테고리 섹션만 표시 */}
             <div css={categorySectionStyle}>
               {(() => {
-                const [cat, subKey] = activeSection.split('/') as [
-                  CategoryType,
-                  string,
-                ]
-                const sectionId = `${cat}/${subKey}`
+                const sectionId = activeSection ?? 'all'
                 const categoryData = categoryProducts[sectionId]
-                const label = (
-                  selectedCategory === 'upper'
-                    ? UPPER_CATEGORIES
-                    : LOWER_CATEGORIES
-                ).find((c) => c.key === subKey)?.label
+
+                if (sectionId === 'all') {
+                  return (
+                    <div data-section="all">
+                      <CategorySection
+                        categoryLabel="All"
+                        categoryData={
+                          categoryData || {
+                            products: [],
+                            page: 0,
+                            totalPages: 0,
+                            last: true,
+                            loading: false,
+                            error: null,
+                          }
+                        }
+                        onProductClick={handleProductClick}
+                        onToggleLike={handleToggleLike}
+                        onPageChange={(page) => {
+                          const currentData = categoryProducts['all']
+                          if (currentData && !currentData.loading) {
+                            const normalizedPage = ((page % 10) + 10) % 10
+                            fetchCategoryProducts('all', 'all', normalizedPage, true)
+                          }
+                        }}
+                        onScrollToTop={scrollToTop}
+                        isLoggedIn={isLoggedIn}
+                      />
+                    </div>
+                  )
+                }
+
+                const [cat, subKey] = sectionId.split('/') as [CategoryType, string]
+                const label = (cat === 'upper' ? UPPER_CATEGORIES : LOWER_CATEGORIES).find(
+                  (c) => c.key === subKey,
+                )?.label
 
                 return (
                   <div data-section={sectionId}>
@@ -491,9 +509,7 @@ export default function HotItemsPage() {
                       }
                       onProductClick={handleProductClick}
                       onToggleLike={handleToggleLike}
-                      onPageChange={(page) =>
-                        loadMoreProducts(cat, subKey, page)
-                      }
+                      onPageChange={(page) => loadMoreProducts(cat, subKey, page)}
                       onScrollToTop={scrollToTop}
                       isLoggedIn={isLoggedIn}
                     />
@@ -655,6 +671,7 @@ const rightContentStyle = css`
   align-items: flex-start;
   justify-content: center;
   font-family: 'Montserrat', sans-serif;
+  overscroll-behavior: contain;
 `
 
 const rightContentBoxStyle = css`
@@ -666,7 +683,31 @@ const rightContentBoxStyle = css`
   justify-content: flex-start;
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
   box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+
+  /* 스크롤바 스타일(검색 페이지 사이드와 동일 톤) */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.35);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.55);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
 `
 
 const titleContainerStyle = css`
@@ -720,13 +761,12 @@ const categoryTabsContainerStyle = css`
 
 const decorStyle = css`
   position: relative;
-  bottom: 0;
-  left: 0;
   display: flex;
   align-items: center;
   gap: 16px;
   margin-top: auto;
   padding-top: 20px;
+  padding-bottom: 40px;
 `
 
 const circleStyle = css`
