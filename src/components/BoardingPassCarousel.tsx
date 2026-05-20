@@ -129,17 +129,63 @@ function DemoModal({ project, onClose }: { project: ProjectTicket; onClose: () =
               <X size={20} color="#1A3A52" />
             </button>
           </div>
-          <iframe
-            title={`${project.name} demo`}
-            src={project.demoUrl}
-            className="w-full"
-            style={{
-              height:
-                project.demoPresentation === "phone"
-                  ? "calc(min(92vh, 780px) - 64px)"
-                  : "calc(92vh - 64px)",
-            }}
-          />
+          {project.demoPresentation === "phone" ? (
+            // Galaxy S26 Ultra 목업 프레임
+            <div className="flex items-center justify-center w-full" style={{ height: "calc(min(92vh, 780px) - 64px)", backgroundColor: "#f5f5f5", overflow: "auto" }}>
+              <div
+                style={{
+                  position: "relative",
+                  width: "360px",
+                  height: "720px",
+                  backgroundColor: "#000",
+                  borderRadius: "40px",
+                  padding: "12px",
+                  boxShadow: "0 20px 60px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.1)",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {/* 노치 영역 */}
+                <div
+                  style={{
+                    height: "28px",
+                    backgroundColor: "#000",
+                    borderRadius: "0 0 20px 20px",
+                    marginBottom: "8px",
+                  }}
+                />
+                {/* 화면 영역 */}
+                <div
+                  style={{
+                    flex: 1,
+                    backgroundColor: "#fff",
+                    borderRadius: "20px",
+                    overflow: "hidden",
+                    boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <iframe
+                    title={`${project.name} demo`}
+                    src={project.demoUrl}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <iframe
+              title={`${project.name} demo`}
+              src={project.demoUrl}
+              className="w-full"
+              style={{
+                height: "calc(92vh - 64px)",
+              }}
+            />
+          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>

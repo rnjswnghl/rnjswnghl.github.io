@@ -1,5 +1,5 @@
 // src/router/index.ts
-import { createRouter, createWebHistory, type RouteLocationRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteLocationRaw } from 'vue-router'
 
 // Test
 import TestOpenViduView from '@/views/StudyRoom/TestOpenViduView.vue'
@@ -137,7 +137,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
 })
 
