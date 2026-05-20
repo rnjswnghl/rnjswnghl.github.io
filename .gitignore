@@ -50,6 +50,11 @@ dist/
 dist-ssr/
 *.local
 
+# 프로젝트 데모용 빌드 산출물은 포함
+!projects/project2/front/dist/
+!projects/project3/dist/
+!projects/project4/dist/
+
 # IDE
 .vscode/
 .idea/
